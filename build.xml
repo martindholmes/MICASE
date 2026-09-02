@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="MICASE" default="all">
+  
+  <description>
+    This build file runs the entire site build process for the MICASE static site.
+  </description>
+  
+  <property name="echo.separator" value="************************************************"/>
+
+  
+  <!-- Jing and Schematron are needed. -->
+  <taskdef name="jing" classname="com.thaiopensource.relaxng.util.JingTask" classpath="${basedir}/lib/jing.jar" />
+  
+  <fileset id="sourceXml" dir="${basedir}/data">
+    <include name="**/*.xml"/>
+  </fileset>
+  
+  <fileset id="productXml" dir="${basedir}/products/xml">
+    <include name="*.xml"/>
+  </fileset>
+  
+  <!-- Location of Saxon jar file. -->
+  <property name="saxon" value="${basedir}/lib/saxon-he-10.jar"/>
+
+
+  <!--  We need ant contrib. -->
+  <taskdef resource="net/sf/antcontrib/antlib.xml">
+    <classpath>
+      <pathelement location="${basedir}/lib/ant-contrib.jar"/>
+    </classpath>
+  </taskdef>
+  
+  <tstamp>
+    <format property="today" pattern="yyyy-MM-dd" locale="en,CA"/>
+  </tstamp>
+  
+  <target name="clean">
+    <description>
+      TARGET clean
+      Removes old site build and cleans up cruft.
+    </description>
+    <echo message="${echo.separator}"/>
+    <echo message="Cleaning up..."/>
+    <mkdir dir="products"/>
+    <delete includeemptydirs="true">
+      <fileset dir="products">
+        <include name="*"/>
+        <include name="**/*"/>
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="gitHashForSuffix">
+    <description>
+      TARGET gitHashForSuffix
+      This simply outputs the first four characters of the 
+      current git commit hash for use by staticSearch as a
+      suffix for versioning.
+    </description>
+    <exec executable="git" dir="${basedir}" outputproperty="gitHash">
+      <arg value="rev-parse"/>
+      <arg value="HEAD"/>
+    </exec>
+    <echo file="${basedir}/gitHash.txt" message="${gitHash}"/>
+    <replaceregexp file="${basedir}/gitHash.txt" match="^(.{4,4}).+$" replace="\1" flags="s"/>
+  </target>
+  
+  <target name="copyXML">
+    <description>
+      TARGET copyXML
+      This target copies the source XML data to the products output 
+      folder. The site is then generated from that data, allowing 
+      for an intermediate step to replace this one, where the 
+      source XML may be modified if that is useful for some reason.
+    </description>
+    <copy todir="${basedir}/products/xml" preservelastmodified="true">
+      <fileset dir="${basedir}/data"/>
+    </copy>
+  </target>
+  
+  <target name="validateXmlSource">
+    <description>
+      TARGET validateXmlSource
+      This target validates the TEI source code in the data folder
+      using an appropriate schema (initially tei_all, but when the 
+      project matures, it will have its own local schema).
+    </description>
+    <echo message="${echo.separator}"/>
+    <echo message="Validating the original XML content documents with RelaxNG..."/>
+    <jing compactsyntax="false" rngfile="${basedir}/data/sch/MICASE.rng" failonerror="true">
+      <fileset refid="sourceXml"/>
+    </jing>
+    <echo message="${echo.separator}"/>
+    <echo message="Validating XML source files with project Schematron..."/>
+    <java fork="true" classname="net.sf.saxon.Transform" 
+      classpath="${saxon}" 
+      failonerror="true">
+      <jvmarg value="-Xmx2048m"/>
+      <arg value="-s:xsl/master_schematron_validation.xsl"/>
+      <arg value="-xsl:xsl/master_schematron_validation.xsl"/>
+      <arg value="xmlToValidateDir=data"/>
+      <arg value="--suppressXsltNamespaceCheck:on"/>
+    </java>
+    <echo message="${echo.separator}"/>
+    <echo message="Schematron validation complete."/>
+  </target>
+  
+  <target name="copyWebResources">
+    <description>
+      TARGET copyWebResources
+      This copies all the ancillary files such as css, js,
+      documentation, and images into the output site folder.
+    </description>
+    <echo message="${echo.separator}"/>
+    <echo message="Copying required resources to the 'products' folder."/>
+    <copy todir="${basedir}/products/fonts" preservelastmodified="true">
+      <fileset dir="${basedir}/fonts"/>
+    </copy>
+    <copy todir="${basedir}/products/css" preservelastmodified="true">
+      <fileset dir="${basedir}/css" includes="*.*css"/>
+    </copy>
+    <copy todir="${basedir}/products/js" preservelastmodified="true">
+      <fileset dir="${basedir}/js"/>
+    </copy>
+    <copy todir="${basedir}/products/images" preservelastmodified="true">
+      <fileset dir="${basedir}/images"/>
+    </copy>
+    <copy todir="products/documentation" preservelastmodified="true">
+      <fileset dir="documentation">
+        <include name="MICASE.html"/>
+        <include name="js/*"/>
+        <include name="css/*"/>
+      </fileset>
+    </copy>
+    <copy todir="products" preservelastmodified="true">
+      <fileset dir="favicons">
+        <include name="*.*"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="createXhtml">
+    <description>
+      TARGET createXhtml
+      This target creates all the HTML page output for the static site.
+    </description>
+    <echo message="${echo.separator}"/>
+    <echo message="Creating XHTML pages..."/>
+    <java fork="true" classname="net.sf.saxon.Transform" 
+      classpath="${saxon}" 
+      failonerror="true">
+      <jvmarg value="-Xmx2048m"/>
+      <arg value="-s:xsl/master_xhtml.xsl"/>
+      <arg value="-xsl:xsl/master_xhtml.xsl"/>
+      <arg value="--suppressXsltNamespaceCheck:on"/>
+    </java>
+    <echo message="${echo.separator}"/>
+    <echo message="Site page creation complete."/>
+  </target>
+  
+  <target name="buildStaticSearch">
+    <description>
+      TARGET buildStaticSearch
+      This target uses the code in the staticSearch folder, which 
+      originates on the staticSearch GitHub project, to build a
+      staticSearch engine for the site.
+    </description>
+    <echo message="${echo.separator}"/>
+    <echo message="Building static search..."/>
+    <ant antfile="build.xml" dir="staticSearch">
+      <property name="ssConfig" value="../config_staticSearch.xml"/>
+    </ant>
+  </target>
+  
+  <target name="validateSite">
+    <description>
+      TARGET validateSite
+      This target validates the complete collection of XHTML5 documents 
+      comprising the output site, using the VNU validator (the same validator used by 
+      the W3C's online validation service).
+      Before it can proceed, it has to copy the jar file, which is stored with an 
+      obfuscated name so that it doesn't break Oxygen's ability to build TEI ODD 
+      files due to a duplicate class.
+    </description>
+    <echo message="${echo.separator}"/>
+    <echo message="Validating the HTML pages produced in the build using the VNU validator."/>
+    <java jar="${basedir}/lib/vnu.jar" failonerror="false" fork="true">
+      <arg value="--format text"/>
+      <arg value="--skip-non-html"/>
+      <arg value="${basedir}/products"/>
+    </java>
+  </target>
+  
+  <target name="postprocessSearchPage">
+    <description>
+      TARGET postprocessSearchPage
+      This target calls an XSLT tranformation on each of the two 
+      search page to add some enhancements and interface changes 
+      not provided by the default staticSearch output.
+    </description>
+    <echo message="${echo.separator}"/>
+    <echo message="Postprocessing search page..."/>
+    <java fork="true" classname="net.sf.saxon.Transform" 
+      classpath="${saxon}" 
+      failonerror="true">
+      <arg value="-s:products/search.html"/>
+      <arg value="-xsl:xsl/master_postprocess_search.xsl"/>
+      <arg value="-o:products/search.html"/>
+      <arg value="projDir=${basedir}"/>
+      <arg value="--suppressXsltNamespaceCheck:on"/>
+    </java>
+  </target>
+  
+  <target name="buildSitemap">
+    <description>
+      TARGET buildSitemap
+      This parses the created HTML website to create a sitemap.xml file 
+      according to the standard.
+    </description>
+    <echo message="${echo.separator}"/>
+    <echo message="Creating sitemap for web indexers..."/>
+    <java fork="true" classname="net.sf.saxon.Transform" 
+      classpath="${saxon}" 
+      failonerror="true">
+      <arg value="-s:xsl/master_build_sitemap.xsl"/>
+      <arg value="-xsl:xsl/master_build_sitemap.xsl"/>
+      <arg value="-o:${basedir}/products/sitemap.xml"/>
+      <arg value="projDir=${basedir}"/>
+      <arg value="--suppressXsltNamespaceCheck:on"/>
+    </java>
+  </target>
+  
+  <target name="mcRsyncToLiveServer">
+    <description>
+      TARGET mcRsyncToLiveServer
+      This pushes the content up to the live location:
+      nfs.hcmc.uvic.ca:/home1t/hcmc/www/project/MICASE
+    </description>
+    <echo message="${echo.separator}"/>
+    <echo message="About to push content up to the live server."/>
+    <echo message="${echo.separator}"/>
+    <echo message="Before doing that, we'll create a dated archive of this build."/>
+    <zip destfile="MICASE_site_${today}.zip" basedir="products"/>
+    <echo message="${echo.separator}"/>
+    <echo message="Now we do the sync..."/>
+    <exec executable="rsync" dir="${basedir}">
+      <arg value="--stats"/>
+      <arg value="--recursive"/>
+      <arg value="--times"/>
+      <arg value="--verbose"/>
+      <arg value="--delete"/>
+      <arg line="-e ssh"/>
+      <arg line="./products/"/>
+      <arg line="${remoteServerUser}@${remoteServerLiveLocation}"/>
+    </exec>
+  </target>
+  
+  <target name="all">
+    <description> 
+      TARGET all
+      
+      This runs the entire build process by calling each 
+      of the individual processes.
+    </description>
+    <antcall target="clean"/>
+    <antcall target="gitHashForSuffix"/>
+    <antcall target="validateXmlSource"/>
+    <antcall target="copyXML"/>
+    <antcall target="copyWebResources"/>
+    <antcall target="createXhtml"/>
+    <antcall target="buildStaticSearch"/>
+    <antcall target="postprocessSearchPage"/>
+    <antcall target="validateSite"/>
+    <antcall target="buildSitemap"/>
+    <!--<ant antfile="build_stats.xml"/>-->
+    <ant antfile="build_diagnostics.xml"/>
+  </target>
+  
+
+  <target name="diagnostics">
+    <ant antfile="build_diagnostics.xml"/>
+  </target>
+  
+  <target name="makeArchive">
+    <description>
+      TARGET makeArchive
+      This target downloads a copy of the current live edition of the
+      site. This is then zipped, ready for backup/archiving.
+    </description>
+    <echo message="${echo.separator}"/>
+    <echo message="Making an archive of the current live site."/>
+    <mkdir dir="${basedir}/archive"/>
+    <delete includeemptydirs="true">
+      <fileset dir="${basedir}/archive">
+        <include name="*"/>
+        <include name="**/*"/>
+      </fileset>
+    </delete>
+    <echo message="Retrieving site files (may take some time)..."/>
+    <exec executable="rsync">
+      <arg value="--stats"/>
+      <arg value="--recursive"/>
+      <arg value="--times"/>
+      <arg value="--verbose"/>
+      <arg line="-e ssh"/>
+      <arg value="mholmes@nfs.hcmc.uvic.ca:/home1t/hcmc/www/project/majw/"/>
+      <arg value="${basedir}/archive/"/>
+    </exec>
+    <echo message="${echo.separator}"/>
+    <echo message="Creating a single zip archive..."/>
+    <zip destfile="${basedir}/majw.uvic.ca_${today}.zip" basedir="${basedir}/archive"/>
+  </target>
+  
+</project>
