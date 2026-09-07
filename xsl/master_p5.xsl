@@ -145,14 +145,14 @@
         </sourceDesc>
     </xsl:template>
     <xsl:template match="RECORDINGSTMT">
-        <recording>
-            <xsl:apply-templates select="@* | node()"/>
-        </recording>
-    </xsl:template>
-    <xsl:template match="RECORDING">
         <recordingStmt>
             <xsl:apply-templates select="@* | node()"/>
         </recordingStmt>
+    </xsl:template>
+    <xsl:template match="RECORDING">
+        <recording>
+            <xsl:apply-templates select="@* | node()"/>
+        </recording>
     </xsl:template>
     <xsl:template match="EQUIPMENT">
         <equipment>
@@ -165,9 +165,11 @@
         </date>
     </xsl:template>
     <xsl:template match="RESPSTMT">
-        <respStmt>
-            <xsl:apply-templates select="@* | node()"/>
-        </respStmt>
+        <xsl:for-each-group select="child::*" group-starting-with="NAME">
+            <respStmt>
+                <xsl:apply-templates select="current-group()"/>
+            </respStmt>
+        </xsl:for-each-group>
     </xsl:template>
     <xsl:template match="RESP">
         <resp>
@@ -188,12 +190,24 @@
         <langUsage>
             <xsl:apply-templates select="@* | node()"/>
         </langUsage>
+        <xsl:if test="child::P">
+            <textDesc>
+                <xsl:for-each select="child::P">
+                    <interaction><xsl:value-of select="normalize-space(.)"/></interaction>
+                </xsl:for-each>
+            </textDesc>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="LANGUAGE">
         <language>
             <xsl:apply-templates select="@* | node()"/>
         </language>
     </xsl:template>
+    <xd:doc>
+        <xd:desc>Siuppress these because we'll handle them in textDesc.</xd:desc>
+    </xd:doc>
+    <xsl:template match="LANGUSAGE/P"/>
+    
     <xsl:template match="PARTICDESC">
         <particDesc>
             <xsl:apply-templates select="@* | node()"/>
@@ -266,11 +280,17 @@
     <xsl:template match="EVENT/@ITERATED">
         <xsl:attribute name="type" select="if (. eq 'N') then 'non-iterated' else 'iterated'"/>
     </xsl:template>
-    <xsl:template match="@TRANS">
-        <xsl:attribute name="trans" select="lower-case(.)"/>
+    <xd:doc>
+        <xd:desc>Many attributes we just lower-case for now.</xd:desc>
+    </xd:doc>
+    <xsl:template match="@TRANS | @SEX | @ROLE | @AGE">
+        <xsl:attribute name="{lower-case(name())}" select="lower-case(.)"/>
     </xsl:template>
     <xsl:template match="@DUR">
         <xsl:attribute name="dur" select="."/>
+    </xsl:template>
+    <xsl:template match="RECORDING/@TYPE">
+        <xsl:attribute name="type" select="lower-case(.)"/>
     </xsl:template>
     <xd:doc>
         <xd:desc>Many attributes we don't want, including default ones.</xd:desc>
