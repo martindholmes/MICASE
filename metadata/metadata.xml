@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml"
+	schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title>Title</title>
+         </titleStmt>
+         <publicationStmt>
+            <p>Publication Information</p>
+         </publicationStmt>
+         <sourceDesc>
+            <p>Information about the source</p>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <classDecl>
+            <taxonomy xml:id="taxAcPos">
+               <gloss>Academic Position/Role</gloss>
+               <category n="JF" xml:id="catAcPos_JF"><gloss>Junior Faculty</gloss></category>
+               <category n="JG" xml:id="catAcPos_JG"><gloss>Junior Graduate Student</gloss></category>
+               <category n="JU" xml:id="catAcPos_JU"><gloss>Junior Undergraduate</gloss></category>
+               <category n="PD" xml:id="catAcPos_PD"><gloss>Post-doctoral Fellow</gloss></category>
+               <category n="RE" xml:id="catAcPos_RE"><gloss>Researcher</gloss></category>
+               <category n="SF" xml:id="catAcPos_SF"><gloss>Senior Faculty</gloss></category>
+               <category n="SG" xml:id="catAcPos_SG"><gloss>Senior Graduate Student</gloss></category>
+               <category n="ST" xml:id="catAcPos_ST"><gloss>Staff</gloss></category>
+               <category n="SU" xml:id="catAcPos_SU"><gloss>Senior Undergraduate</gloss></category>
+               <category n="UN" xml:id="catAcPos_UN"><gloss>Unknown</gloss></category>
+               <category n="VO" xml:id="catAcPos_VO"><gloss>Visitor/Other</gloss></category>
+            </taxonomy> 
+            
+            <taxonomy xml:id="taxLang">
+               <gloss>Language</gloss>
+               <category n="ARA" xml:id="catLang_ARA"><gloss>Arabic</gloss></category>
+               <category n="ARM" xml:id="catLang_ARM"><gloss>Armenian</gloss></category>
+               <category n="CAN" xml:id="catLang_CAN"><gloss>Cantonese</gloss></category>
+               <category n="CHI" xml:id="catLang_CHI"><gloss>Mandarin</gloss></category>
+               <category n="CZE" xml:id="catLang_CZE"><gloss>Czech</gloss></category>
+               <category n="DUT" xml:id="catLang_DUT"><gloss>Dutch</gloss></category>
+               <category n="EST" xml:id="catLang_EST"><gloss>Estonian</gloss></category>
+               <category n="FAR" xml:id="catLang_FAR"><gloss>Farsi</gloss></category>
+               <category n="FRE" xml:id="catLang_FRE"><gloss>French</gloss></category>
+               <category n="GER" xml:id="catLang_GER"><gloss>German</gloss></category>
+               <category n="GUJ" xml:id="catLang_GUJ"><gloss>Gujarati</gloss></category>
+               <category n="HEB" xml:id="catLang_HEB"><gloss>Hebrew</gloss></category>
+               <category n="HIN" xml:id="catLang_HIN"><gloss>Hindi</gloss></category>
+               <category n="HUN" xml:id="catLang_HUN"><gloss>Hungarian</gloss></category>
+               <category n="IBO" xml:id="catLang_IBO"><gloss>Ibo</gloss></category>
+               <category n="IND" xml:id="catLang_IND"><gloss>Indonesian</gloss></category>
+               <category n="ITA" xml:id="catLang_ITA"><gloss>Italian</gloss></category>
+               <category n="JAP" xml:id="catLang_JAP"><gloss>Japanese</gloss></category>
+               <category n="KAN" xml:id="catLang_KAN"><gloss>Kannada</gloss></category>
+               <category n="KOR" xml:id="catLang_KOR"><gloss>Korean</gloss></category>
+               <category n="MAC" xml:id="catLang_MAC"><gloss>Macedonian</gloss></category>
+               <category n="MAR" xml:id="catLang_MAR"><gloss>Marathi</gloss></category>
+               <category n="POL" xml:id="catLang_POL"><gloss>Polish</gloss></category>
+               <category n="POR" xml:id="catLang_POR"><gloss>Portuguese</gloss></category>
+               <category n="RUS" xml:id="catLang_RUS"><gloss>Russian</gloss></category>
+               <category n="SAE" xml:id="catLang_SAE"><gloss>South African English</gloss></category>
+               <category n="SLO" xml:id="catLang_SLO"><gloss>Slovak</gloss></category>
+               <category n="SPA" xml:id="catLang_SPA"><gloss>Spanish</gloss></category>
+               <category n="SWA" xml:id="catLang_SWA"><gloss>Swahili</gloss></category>
+               <category n="SWE" xml:id="catLang_SWE"><gloss>Swedish</gloss></category>
+               <category n="TAG" xml:id="catLang_TAG"><gloss>Tagalog</gloss></category>
+               <category n="TEL" xml:id="catLang_TEL"><gloss>Telegu</gloss></category>
+               <category n="THA" xml:id="catLang_THA"><gloss>Thai</gloss></category>
+               <category n="TUR" xml:id="catLang_TUR"><gloss>Turkish</gloss></category>
+               <category n="UKE" xml:id="catLang_UKE"><gloss>British English</gloss></category>
+               <category n="UKR" xml:id="catLang_UKR"><gloss>Ukrainian</gloss></category>
+               <category n="UNK" xml:id="catLang_UNK"><gloss>Unknown</gloss></category>
+               <category n="URD" xml:id="catLang_URD"><gloss>Urdu</gloss></category>
+               <category n="VIE" xml:id="catLang_VIE"><gloss>Vietnamese</gloss></category>
+            </taxonomy>
+            
+            <taxonomy xml:id="taxAcDiv">
+               <desc>Academic Division</desc>
+               <category n="BS" xml:id="catAcDiv_BS"><gloss>Biological and Health Sciences</gloss></category>
+               <category n="HA" xml:id="catAcDiv_HA"><gloss>Humanities and Arts</gloss></category>
+               <category n="NA" xml:id="catAcDiv_NA"><gloss>Not Applicable/Other</gloss></category>
+               <category n="PS" xml:id="catAcDiv_PS"><gloss>Physical Sciences and Engineering</gloss></category>
+               <category n="SS" xml:id="catAcDiv_SS"><gloss>Social Sciences and Education</gloss></category>
+            </taxonomy>
+            
+            <taxonomy xml:id="taxAcDisc">
+               <desc>Academic Discipline</desc>
+               <category n="095" xml:id="catAcDisc_095"><gloss>Afroamerican and African Studies</gloss></category>
+               <category n="105" xml:id="catAcDisc_105"><gloss>American Culture</gloss></category>
+               <category n="115" xml:id="catAcDisc_115"><gloss>Anthropology</gloss></category>
+               <category n="125" xml:id="catAcDisc_125"><gloss>Architecture</gloss></category>
+               <category n="140" xml:id="catAcDisc_140"><gloss>Asian Languages and Cultures</gloss></category>
+               <category n="150" xml:id="catAcDisc_150"><gloss>Astronomy</gloss></category>
+               <category n="165" xml:id="catAcDisc_165"><gloss>Biomedical Engineering</gloss></category>
+               <category n="175" xml:id="catAcDisc_175"><gloss>Biology</gloss></category>
+               <category n="185" xml:id="catAcDisc_185"><gloss>Business Administration</gloss></category>
+               <category n="195" xml:id="catAcDisc_195"><gloss>Chemical Engineering</gloss></category>
+               <category n="200" xml:id="catAcDisc_200"><gloss>Chemistry</gloss></category>
+               <category n="205" xml:id="catAcDisc_205"><gloss>Civil and Environmental Engineering</gloss></category>
+               <category n="215" xml:id="catAcDisc_215"><gloss>Classical Studies</gloss></category>
+               <category n="220" xml:id="catAcDisc_220"><gloss>Communication</gloss></category>
+               <category n="235" xml:id="catAcDisc_235"><gloss>Computer Science (general undergraduate)</gloss></category>
+               <category n="270" xml:id="catAcDisc_270"><gloss>Electrical Engin. and Computer Science</gloss></category>
+               <category n="280" xml:id="catAcDisc_280"><gloss>Economics</gloss></category>
+               <category n="285" xml:id="catAcDisc_285"><gloss>Education</gloss></category>
+               <category n="295" xml:id="catAcDisc_295"><gloss>Engineering (general undergraduate)</gloss></category>
+               <category n="300" xml:id="catAcDisc_300"><gloss>English</gloss></category>
+               <category n="301" xml:id="catAcDisc_301"><gloss>English Composition</gloss></category>
+               <category n="305" xml:id="catAcDisc_305"><gloss>Geological Sciences</gloss></category>
+               <category n="315" xml:id="catAcDisc_315"><gloss>History</gloss></category>
+               <category n="320" xml:id="catAcDisc_320"><gloss>History of Art</gloss></category>
+               <category n="330" xml:id="catAcDisc_330"><gloss>Industrial and Operations Engineering</gloss></category>
+               <category n="335" xml:id="catAcDisc_335"><gloss>Information and Library Science</gloss></category>
+               <category n="340" xml:id="catAcDisc_340"><gloss>Public Policy</gloss></category>
+               <category n="355" xml:id="catAcDisc_355"><gloss>Linguistics</gloss></category>
+               <category n="365" xml:id="catAcDisc_365"><gloss>Mechanical Engineering</gloss></category>
+               <category n="385" xml:id="catAcDisc_385"><gloss>Math</gloss></category>
+               <category n="400" xml:id="catAcDisc_400"><gloss>Immunology</gloss></category>
+               <category n="405" xml:id="catAcDisc_405"><gloss>Microbiology</gloss></category>
+               <category n="420" xml:id="catAcDisc_420"><gloss>Fine Arts</gloss></category>
+               <category n="425" xml:id="catAcDisc_425"><gloss>Natural Resources</gloss></category>
+               <category n="445" xml:id="catAcDisc_445"><gloss>Nuclear Engineering</gloss></category>
+               <category n="450" xml:id="catAcDisc_450"><gloss>Nursing</gloss></category>
+               <category n="475" xml:id="catAcDisc_475"><gloss>Philosophy</gloss></category>
+               <category n="485" xml:id="catAcDisc_485"><gloss>Physics</gloss></category>
+               <category n="495" xml:id="catAcDisc_495"><gloss>Political Science</gloss></category>
+               <category n="500" xml:id="catAcDisc_500"><gloss>Psychology</gloss></category>
+               <category n="542" xml:id="catAcDisc_542"><gloss>Religion</gloss></category>
+               <category n="545" xml:id="catAcDisc_545"><gloss>Romance Languages and Literature</gloss></category>
+               <category n="560" xml:id="catAcDisc_560"><gloss>Social Work</gloss></category>
+               <category n="565" xml:id="catAcDisc_565"><gloss>Sociology</gloss></category>
+               <category n="575" xml:id="catAcDisc_575"><gloss>Statistics</gloss></category>
+               <category n="578" xml:id="catAcDisc_578"><gloss>Technical Communications</gloss></category>
+               <category n="605" xml:id="catAcDisc_605"><gloss>Women's Studies</gloss></category>
+               <category n="700" xml:id="catAcDisc_700"><gloss>Advising</gloss></category>
+               <category n="999" xml:id="catAcDisc_999"><gloss>Misc. Nondepartmental</gloss></category>
+            </taxonomy>
+            
+            <taxonomy xml:id="taxPartLevel">
+               <desc>Participant Level</desc>
+               <category n="JF" xml:id="catPartLevel_JF"><gloss>Junior Faculty</gloss></category>
+               <category n="JG" xml:id="catPartLevel_JG"><gloss>Junior Graduate Students</gloss></category>
+               <category n="JU" xml:id="catPartLevel_JU"><gloss>Junior Undergraduates</gloss></category>
+               <category n="MF" xml:id="catPartLevel_MF"><gloss>Mixed Faculty</gloss></category>
+               <category n="MG" xml:id="catPartLevel_MG"><gloss>Mixed Graduate Students</gloss></category>
+               <category n="MU" xml:id="catPartLevel_MU"><gloss>Mixed Undergraduates</gloss></category>
+               <category n="MX" xml:id="catPartLevel_MX"><gloss>Mixed Students/Fac/Staff</gloss></category>
+               <category n="SF" xml:id="catPartLevel_SF"><gloss>Senior Faculty</gloss></category>
+               <category n="SG" xml:id="catPartLevel_SG"><gloss>Senior Graduate Students</gloss></category>
+               <category n="ST" xml:id="catPartLevel_ST"><gloss>Staff</gloss></category>
+               <category n="SU" xml:id="catPartLevel_SU"><gloss>Senior Undergraduates</gloss></category>
+               <category n="VO" xml:id="catPartLevel_VO"><gloss>Visitor/Other</gloss></category>
+            </taxonomy>
+            
+            <taxonomy xml:id="taxInteractivity">
+               <desc>Interactivity Rating</desc>
+               <category n="HI" xml:id="catInteractivity_HI"><gloss>Highly interactive</gloss></category>
+               <category n="HM" xml:id="catInteractivity_HM"><gloss>Highly monologic</gloss></category>
+               <category n="MI" xml:id="catInteractivity_MI"><gloss>Mostly interactive</gloss></category>
+               <category n="MM" xml:id="catInteractivity_MM"><gloss>Mostly monologic</gloss></category>
+               <category n="MX" xml:id="catInteractivity_MX"><gloss>Mixed</gloss></category>
+            </taxonomy>
+            
+            <taxonomy xml:id="taxAgeRange">
+               <desc>Age Range</desc>
+               <category n="0" xml:id="catAgeRange_0"><gloss>Unknown</gloss></category>
+               <category n="1" xml:id="catAgeRange_1"><gloss>17-23</gloss></category>
+               <category n="2" xml:id="catAgeRange_2"><gloss>24-30</gloss></category>
+               <category n="3" xml:id="catAgeRange_3"><gloss>31-50</gloss></category>
+               <category n="4" xml:id="catAgeRange_4"><gloss>51 &amp; over</gloss></category>
+            </taxonomy>
+            
+         </classDecl>
+      </encodingDesc>
+   </teiHeader>
+   <text>
+      <body>
+         <p>Some text here.</p>
+      </body>
+   </text>
+</TEI>

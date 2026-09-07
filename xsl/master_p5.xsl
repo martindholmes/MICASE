@@ -22,7 +22,7 @@
     <xd:doc>
         <xd:desc>We're producing XHTML5.</xd:desc>
     </xd:doc>
-    <xsl:output method="xhtml" html-version="5" encoding="UTF-8" omit-xml-declaration="yes"
+    <xsl:output method="xhtml" html-version="5" encoding="UTF-8" 
         normalization-form="NFC" indent="yes" exclude-result-prefixes="#all" include-content-type="no"/>
     
     <xd:doc>
@@ -63,19 +63,39 @@
         <xsl:message>Building site...</xsl:message>
         <xsl:message>$docsToBuild = {$docsToBuild}</xsl:message>
         
-        <xsl:for-each select="$xmlSource[TEI.2/@ID = $docsToBuildIds or $docsToBuild eq '']">
-            <xsl:variable name="currId" as="xs:string" select="xs:string(TEI.2/@ID)"/>
-            <xsl:message>Processing document {TEI.2/@ID}</xsl:message>
-            <xsl:result-document href="{$baseDir}/p5/{$currId}.xml">
-                <xsl:apply-templates/>
-            </xsl:result-document>
-        </xsl:for-each>
+        <xsl:choose>
+            <xsl:when test="/TEI.2">
+                <!-- Single file input, dev/testing scenario. -->
+                <xsl:variable name="currId" as="xs:string" select="xs:string(/TEI.2/@ID)"/>
+                <xsl:message>Processing document {TEI.2/@ID}</xsl:message>
+                <xsl:result-document href="{$baseDir}/p5/{$currId}.xml">
+                    <xsl:apply-templates/>
+                </xsl:result-document>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- Do them all. -->
+                <xsl:for-each select="$xmlSource[TEI.2/@ID = $docsToBuildIds or $docsToBuild eq '']">
+                    <xsl:variable name="currId" as="xs:string" select="xs:string(TEI.2/@ID)"/>
+                    <xsl:message>Processing document {TEI.2/@ID}</xsl:message>
+                    <xsl:result-document href="{$baseDir}/p5/{$currId}.xml">
+                        <xsl:apply-templates/>
+                    </xsl:result-document>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+        
+       
     </xsl:template>
     
     <xd:doc>
         <xd:desc>Root element</xd:desc>
     </xd:doc>
     <xsl:template match="TEI.2">
+        <xsl:processing-instruction name="xml-model">href="https://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" 
+            schematypens="http://relaxng.org/ns/structure/1.0</xsl:processing-instruction>
+        <xsl:processing-instruction name="xml-model">href="https://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" 
+            schematypens="http://purl.oclc.org/dsdl/schematron</xsl:processing-instruction>
+        <xsl:sequence select="'&#x0a;&#x0a;'"/>
         <TEI>
             <xsl:apply-templates select="@* | node()"/>
         </TEI>
@@ -203,8 +223,11 @@
             <xsl:apply-templates select="@* | node()"/>
         </language>
     </xsl:template>
+    <xsl:template match="LANGUAGE/@ID">
+        <xsl:attribute name="ident" select="."/>
+    </xsl:template>
     <xd:doc>
-        <xd:desc>Siuppress these because we'll handle them in textDesc.</xd:desc>
+        <xd:desc>Suppress these because we'll handle them in textDesc.</xd:desc>
     </xd:doc>
     <xsl:template match="LANGUSAGE/P"/>
     
@@ -283,8 +306,14 @@
     <xd:doc>
         <xd:desc>Many attributes we just lower-case for now.</xd:desc>
     </xd:doc>
-    <xsl:template match="@TRANS | @SEX | @ROLE | @AGE">
+    <xsl:template match="@TRANS | @AGE">
         <xsl:attribute name="{lower-case(name())}" select="lower-case(.)"/>
+    </xsl:template>
+    <xd:doc>
+        <xd:desc>@ROLE we keep the case of the value.</xd:desc>
+    </xd:doc>
+    <xsl:template match="@ROLE | @SEX | @SIZE">
+        <xsl:attribute name="{lower-case(name())}" select="."/>
     </xsl:template>
     <xsl:template match="@DUR">
         <xsl:attribute name="dur" select="."/>
