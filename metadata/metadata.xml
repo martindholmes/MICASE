@@ -171,6 +171,25 @@
                <category n="4" xml:id="catAgeRange_4"><gloss>51 &amp; over</gloss></category>
             </taxonomy>
             
+            <taxonomy xml:id="taxSpeechEventType">
+               <desc>Speech Event Type</desc>
+               <category n="ADV" xml:id="catSpeechEventType_ADV"><gloss>Advising Session</gloss></category>
+               <category n="COL" xml:id="catSpeechEventType_COL"><gloss>Colloquium</gloss></category>
+               <category n="DEF" xml:id="catSpeechEventType_DEF"><gloss>Dissertation Defense</gloss></category>
+               <category n="DIS" xml:id="catSpeechEventType_DIS"><gloss>Discussion Sections</gloss></category>
+               <category n="INT" xml:id="catSpeechEventType_INT"><gloss>Interview</gloss></category>
+               <category n="LAB" xml:id="catSpeechEventType_LAB"><gloss>Lab Section</gloss></category>
+               <category n="LEL" xml:id="catSpeechEventType_LEL"><gloss>Lecture-large</gloss></category>
+               <category n="LES" xml:id="catSpeechEventType_LES"><gloss>Lecture-small</gloss></category>
+               <category n="MTG" xml:id="catSpeechEventType_MTG"><gloss>Meeting</gloss></category>
+               <category n="OFC" xml:id="catSpeechEventType_OFC"><gloss>Office Hours</gloss></category>
+               <category n="SEM" xml:id="catSpeechEventType_SEM"><gloss>Seminar</gloss></category>
+               <category n="SGR" xml:id="catSpeechEventType_SGR"><gloss>Study Group</gloss></category>
+               <category n="STP" xml:id="catSpeechEventType_STP"><gloss>Student Presentations</gloss></category>
+               <category n="SVC" xml:id="catSpeechEventType_SVC"><gloss>Service Encounter</gloss></category>
+               <category n="TOU" xml:id="catSpeechEventType_TOU"><gloss>Tour</gloss></category>
+            </taxonomy>
+            
          </classDecl>
       </encodingDesc>
    </teiHeader>

@@ -6,6 +6,7 @@
     exclude-result-prefixes="#all"
     xpath-default-namespace=""
     xmlns="http://www.tei-c.org/ns/1.0"
+    xmlns:tei="http://www.tei-c.org/ns/1.0"
     xmlns:xh="http://www.w3.org/1999/xhtml"
     xmlns:hcmc="http://hcmc.uvic.ca/ns"
     expand-text="yes"
@@ -34,6 +35,20 @@
         <xd:desc>For clarity, we use a basedir from the Ant build file.</xd:desc>
     </xd:doc>
     <xsl:param name="baseDir" as="xs:string" select="'..'"/>
+    
+    <xd:doc>
+        <xd:desc>A map of all the metadata keys to their categories.</xd:desc>
+    </xd:doc>
+    <xsl:variable name="mapmetaKeysToCategories" as="map(xs:string, element(tei:category))">
+        <xsl:map>
+            <xsl:for-each select="doc($baseDir || '/metadata/metadata.xml')//tei:taxonomy">
+                <xsl:variable name="taxId" as="xs:string" select="xs:string(@xml:id)"/>
+                <xsl:for-each select="descendant::category">
+                    <xsl:map-entry key="concat($taxId, '_', xs:string(@n))" select="."/>
+                </xsl:for-each>
+            </xsl:for-each>
+        </xsl:map>
+    </xsl:variable>
     
     <xd:doc>
         <xd:desc>Set this param to limit the build to a single file.</xd:desc>
@@ -91,13 +106,24 @@
         <xd:desc>Root element</xd:desc>
     </xd:doc>
     <xsl:template match="TEI.2">
+        <!-- First we figure out some metadata from a few clues that exist in the file. -->
+        
+        <xsl:variable name="idBits" as="xs:string+">
+            <xsl:analyze-string select="@ID" regex="(\d+|[a-zA-Z]+)">
+                <xsl:matching-substring><xsl:sequence select="upper-case(.)"/></xsl:matching-substring>
+            </xsl:analyze-string>
+        </xsl:variable>
+        <!--<xsl:message select="string-join($idBits, ' : ')"/>-->
+        
         <xsl:processing-instruction name="xml-model">href="https://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" 
             schematypens="http://relaxng.org/ns/structure/1.0</xsl:processing-instruction>
         <xsl:processing-instruction name="xml-model">href="https://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" 
             schematypens="http://purl.oclc.org/dsdl/schematron</xsl:processing-instruction>
         <xsl:sequence select="'&#x0a;&#x0a;'"/>
         <TEI>
-            <xsl:apply-templates select="@* | node()"/>
+            <xsl:apply-templates select="@* | node()">
+                <xsl:with-param name="idBits" as="xs:string+" select="$idBits" tunnel="yes"/>
+            </xsl:apply-templates>
         </TEI>
     </xsl:template>
     
