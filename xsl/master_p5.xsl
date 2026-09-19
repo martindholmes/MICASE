@@ -341,8 +341,15 @@
     <xsl:template match="@ROLE | @SEX | @SIZE">
         <xsl:attribute name="{lower-case(name())}" select="."/>
     </xsl:template>
-    <xsl:template match="@DUR">
-        <xsl:attribute name="dur" select="."/>
+    <xsl:template match="RECORDING/@DUR">
+        <!-- These seem always to be a bare minute figure. -->
+        <xsl:attribute name="dur" select="'PT' || . || 'M'"/>
+    </xsl:template>
+    <xd:doc>
+        <xd:desc>These seem to be seconds folowing the colon.</xd:desc>
+    </xd:doc>
+    <xsl:template match="PAUSE/@DUR | EVENT/@DUR">
+        <xsl:attribute name="dur" select="'PT' || substring-after(., ':') || 'S'"/>
     </xsl:template>
     <xsl:template match="RECORDING/@TYPE">
         <xsl:attribute name="type" select="lower-case(.)"/>
