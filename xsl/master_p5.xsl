@@ -238,9 +238,23 @@
         </langUsage>
         <xsl:if test="child::P">
             <textDesc>
-                <xsl:for-each select="child::P">
-                    <interaction><xsl:value-of select="normalize-space(.)"/></interaction>
-                </xsl:for-each>
+                <!-- This is a true stupidity of P5: channel, constitution,
+                    preparedness etc. are all required, even if there's nothing
+                    to put in them. -->
+                <channel mode="s">face-to-face conversation</channel>
+                <constitution type="unknown"/>
+                <derivation type="original"/>
+                <domain type="academic"/>
+                <factuality type="mixed"/>
+                <xsl:where-populated>
+                    <interaction>
+                        <xsl:for-each select="child::P">
+                            <note><xsl:value-of select="normalize-space(.)"/></note>
+                        </xsl:for-each>
+                    </interaction>
+                </xsl:where-populated>
+                <preparedness type="unknown"/>
+                <purpose type="unknown"/>
             </textDesc>
         </xsl:if>
     </xsl:template>
