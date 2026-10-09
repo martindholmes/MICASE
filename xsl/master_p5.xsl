@@ -279,8 +279,31 @@
     <xsl:template match="PERSON">
         <person>
             <xsl:apply-templates select="@* | node()"/>
+            <xsl:if test="child::FIRSTLANG">
+                <langKnowledge type="first">
+                    <p><xsl:value-of select="normalize-space(FIRSTLANG)"/></p>
+                </langKnowledge>
+            </xsl:if>
+            <xsl:if test="@LANG">
+                <langKnowledge>
+                    <p><xsl:value-of select="@LANG"/></p>
+                </langKnowledge>
+            </xsl:if>
+            <xsl:if test="@LANG">
+                <langKnowledge>
+                    <p><xsl:value-of select="@LANG"/></p>
+                </langKnowledge>
+            </xsl:if>
+            <xsl:if test="@RESTRICT">
+                <trait>
+                    <label>Restriction</label>
+                    <desc><xsl:value-of select="@RESTRICT"/></desc>
+                </trait>
+            </xsl:if>
         </person>
     </xsl:template>
+    <xsl:template match="PERSON/@RESTRICT | PERSON/@LANG | PERSON/FIRSTLANG"/>
+    
     <xsl:template match="PERSONGRP">
         <personGrp>
             <xsl:apply-templates select="@* | node()"/>
