@@ -302,6 +302,7 @@
             </xsl:if>
         </person>
     </xsl:template>
+    <!-- These are handled above. -->
     <xsl:template match="PERSON/@RESTRICT | PERSON/@LANG | PERSON/FIRSTLANG"/>
     
     <xsl:template match="PERSONGRP">
@@ -329,11 +330,37 @@
             <xsl:apply-templates select="@* | node()"/>
         </body>
     </xsl:template>
-    <xsl:template match="U">
+    <xsl:template match="U[not(child::U)]">
         <u>
-            <xsl:apply-templates select="@* | node()"/>
+            <xsl:apply-templates select="@*[not(local-name() eq 'trans')] | node()"/>
         </u>
     </xsl:template>
+    
+    
+    <!-- The biggest issue is nested <u> elements, which 
+         are not alloowed in P5. The solution should be to
+         unwrap them, and set the @trans attribute to "overlap". -->
+    
+    <xsl:template match="U[child::U]">
+        <xsl:variable name="currU" as="element(U)" select="."/>
+        <xsl:for-each-group select="child::node()" group-starting-with="text()[normalize-space(.)] | U">
+            <xsl:choose>
+                <xsl:when test="current-group()[1][self::U]"><xsl:text>
+                    </xsl:text><u trans="overlap">
+                        <xsl:apply-templates select="current-group()/@*[not(local-name() eq 'trans')] | current-group()/node()"/>
+                    </u>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>
+                    </xsl:text><u>
+                        <xsl:apply-templates select="$currU/@*"/>
+                        <xsl:apply-templates select="current-group()"/>
+                    </u>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each-group>
+    </xsl:template>
+    
     <xsl:template match="OVERLAP">
         <seg type="overlap">
             <xsl:apply-templates select="@* | node()"/>
@@ -349,6 +376,11 @@
             <xsl:apply-templates select="@ITERATED"/>
             <xsl:apply-templates select="@DESC"/>
         </incident>
+    </xsl:template>
+    <xsl:template match="FOREIGN">
+        <foreign>
+            <xsl:apply-templates select="@*|node()"/>
+        </foreign>
     </xsl:template>
     
     <!-- ************ ATTRIBUTES ************* -->
@@ -367,9 +399,9 @@
         <xsl:attribute name="type" select="if (. eq 'N') then 'non-iterated' else 'iterated'"/>
     </xsl:template>
     <xd:doc>
-        <xd:desc>Many attributes we just lower-case for now.</xd:desc>
+        <xd:desc>Some attributes we just lower-case for now.</xd:desc>
     </xd:doc>
-    <xsl:template match="@TRANS | @AGE">
+    <xsl:template match="@AGE">
         <xsl:attribute name="{lower-case(name())}" select="lower-case(.)"/>
     </xsl:template>
     <xd:doc>
@@ -394,5 +426,5 @@
     <xd:doc>
         <xd:desc>Many attributes we don't want, including default ones.</xd:desc>
     </xd:doc>
-    <xsl:template match="TEIHEADER/@TYPE | @TEIFORM | @STATUS | @DEFAULT"/>
+    <xsl:template match="TEIHEADER/@TYPE | @TEIFORM | @STATUS | @DEFAULT | @TRANS"/>
 </xsl:stylesheet>
