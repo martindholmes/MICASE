@@ -393,13 +393,39 @@
     <xsl:template match="SIC">
         <sic><xsl:apply-templates select="@*|node()"/></sic>
     </xsl:template>
+    <xsl:template match="GAP">
+        <gap>
+            <xsl:apply-templates select="@*[not(local-name() eq 'DESC')]"/>
+            <xsl:apply-templates select="@DESC"/>
+        </gap>
+    </xsl:template>
+    <xsl:template match="WRITING">
+        <writing><xsl:apply-templates select="@* | node()"/></writing>
+    </xsl:template>
     
     <!-- ************ ATTRIBUTES ************* -->
     <xsl:template match="@ID">
         <xsl:attribute name="xml:id" select="."/>
     </xsl:template>
-    <xsl:template match="U/@WHO">
+    <xsl:template match="U/@WHO | PAUSE/@WHO">
         <xsl:attribute name="who" select="'#' || ."/>
+    </xsl:template>
+    <xsl:template match="U/@RESTRICT">
+        <xsl:choose>
+            <!-- No reason to record no restrictions, surely? -->
+            <xsl:when test=". eq 'NONE'"></xsl:when>
+            <xsl:otherwise>
+                <!-- We have to use the @n attribute for this, since there's
+                     no equivalent in P5. -->
+                <xsl:attribute name="n" select="'Restriction: ' || ."/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template match="GAP/@DESC">
+        <desc><xsl:value-of select="."/></desc>
+    </xsl:template>
+    <xsl:template match="GAP/@REASON">
+        <xsl:attribute name="reason" select="."/>
     </xsl:template>
     <xsl:template match="EVENT/@DESC">
         <desc>
@@ -429,10 +455,24 @@
         <xd:desc>These seem to be seconds folowing the colon.</xd:desc>
     </xd:doc>
     <xsl:template match="PAUSE/@DUR | EVENT/@DUR">
-        <xsl:attribute name="dur" select="'PT' || substring-after(., ':') || 'S'"/>
+        <xsl:choose>
+            <xsl:when test="matches(., ':\d+$')">
+                <xsl:attribute name="dur" select="'PT' ||substring-after(., ':') || 'S'"/>
+            </xsl:when>
+            <xsl:when test="matches(., '^\d+$')">
+                <xsl:attribute name="dur" select="'PT' || . || 'S'"/>
+            </xsl:when>
+            <xsl:when test="matches(., '^\d+:\d+$')">
+                <xsl:attribute name="dur" select="'PT' || replace(., ':', '.') || 'S'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message terminate="yes" select="'@DUR value of ' || . || ' cannot be converted to @dur.'"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        
     </xsl:template>
-    <xsl:template match="RECORDING/@TYPE | SEG/@TYPE">
-        <xsl:attribute name="type" select="lower-case(replace(., '\s+', '_'))"/>
+    <xsl:template match="RECORDING/@TYPE | SEG/@TYPE | SEG/@SUBTYPE | PAUSE/@TYPE | WRITING/@TYPE">
+        <xsl:attribute name="{lower-case(local-name())}" select="lower-case(replace(., '\s+', '_'))"/>
     </xsl:template>
     <xd:doc>
         <xd:desc>Many attributes we don't want, including default ones.</xd:desc>
