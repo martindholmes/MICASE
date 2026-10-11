@@ -372,6 +372,10 @@
     <xsl:template match="PAUSE">
         <pause>
             <xsl:apply-templates select="@* | node()"/>
+            <!-- This is for a specific bug in one file. -->
+            <xsl:if test="@DUR and contains(@DUR, 'PAUSE')">
+                <xsl:attribute name="n" select="replace(@DUR, '^.+(PAUSE.+)$', '$1')"/>
+            </xsl:if>
         </pause>
     </xsl:template>
     <xsl:template match="EVENT">
@@ -456,14 +460,17 @@
     </xd:doc>
     <xsl:template match="PAUSE/@DUR | EVENT/@DUR">
         <xsl:choose>
-            <xsl:when test="matches(., ':\d+$')">
-                <xsl:attribute name="dur" select="'PT' ||substring-after(., ':') || 'S'"/>
+            <xsl:when test="matches(., ':\d+\s*$')">
+                <xsl:attribute name="dur" select="'PT' || normalize-space(substring-after(., ':')) || 'S'"/>
             </xsl:when>
-            <xsl:when test="matches(., '^\d+$')">
-                <xsl:attribute name="dur" select="'PT' || . || 'S'"/>
+            <xsl:when test="matches(., '^\d+\s*$')">
+                <xsl:attribute name="dur" select="'PT' || normalize-space(.) || 'S'"/>
             </xsl:when>
-            <xsl:when test="matches(., '^\d+:\d+$')">
-                <xsl:attribute name="dur" select="'PT' || replace(., ':', '.') || 'S'"/>
+            <xsl:when test="matches(., '^\d+:\d+\s*$')">
+                <xsl:attribute name="dur" select="'PT' || normalize-space(replace(., ':', '.')) || 'S'"/>
+            </xsl:when>
+            <xsl:when test="contains(., 'PAUSE')">
+                <xsl:attribute name="dur" select="'PT' || normalize-space(substring-before(substring-after(., ':'), ' ')) || 'S'"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message terminate="yes" select="'@DUR value of ' || . || ' cannot be converted to @dur.'"/>
