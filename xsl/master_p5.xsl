@@ -343,22 +343,25 @@
     
     <xsl:template match="U[child::U]">
         <xsl:variable name="currU" as="element(U)" select="."/>
-        <xsl:for-each-group select="child::node()" group-starting-with="text()[normalize-space(.)] | U">
+        <xsl:for-each select="child::text()[normalize-space(.)] | child::OVERLAP | child::U">
             <xsl:choose>
-                <xsl:when test="current-group()[1][self::U]"><xsl:text>
+                <xsl:when test="self::U"><xsl:text>
                     </xsl:text><u trans="overlap">
-                        <xsl:apply-templates select="current-group()/@*[not(local-name() eq 'trans')] | current-group()/node()"/>
+                        <xsl:apply-templates select="./@*[not(local-name() eq 'trans')] | child::node()"/>
                     </u>
+                </xsl:when>
+                <xsl:when test="self::OVERLAP">
+                    <u who="{$currU/@WHO}"><xsl:apply-templates select="."/></u>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>
                     </xsl:text><u>
                         <xsl:apply-templates select="$currU/@*"/>
-                        <xsl:apply-templates select="current-group()"/>
+                        <xsl:apply-templates select="."/>
                     </u>
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:for-each-group>
+        </xsl:for-each>
     </xsl:template>
     
     <xsl:template match="OVERLAP">
@@ -381,6 +384,14 @@
         <foreign>
             <xsl:apply-templates select="@*|node()"/>
         </foreign>
+    </xsl:template>
+    <xsl:template match="SEG">
+        <seg>
+            <xsl:apply-templates select="@*|node()"/>
+        </seg>
+    </xsl:template>
+    <xsl:template match="SIC">
+        <sic><xsl:apply-templates select="@*|node()"/></sic>
     </xsl:template>
     
     <!-- ************ ATTRIBUTES ************* -->
@@ -420,11 +431,11 @@
     <xsl:template match="PAUSE/@DUR | EVENT/@DUR">
         <xsl:attribute name="dur" select="'PT' || substring-after(., ':') || 'S'"/>
     </xsl:template>
-    <xsl:template match="RECORDING/@TYPE">
-        <xsl:attribute name="type" select="lower-case(.)"/>
+    <xsl:template match="RECORDING/@TYPE | SEG/@TYPE">
+        <xsl:attribute name="type" select="lower-case(replace(., '\s+', '_'))"/>
     </xsl:template>
     <xd:doc>
         <xd:desc>Many attributes we don't want, including default ones.</xd:desc>
     </xd:doc>
-    <xsl:template match="TEIHEADER/@TYPE | @TEIFORM | @STATUS | @DEFAULT | @TRANS"/>
+    <xsl:template match="TEIHEADER/@TYPE | PAUSE/@N | @TEIFORM | @STATUS | @DEFAULT | @TRANS | @PART"/>
 </xsl:stylesheet>
