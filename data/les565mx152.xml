@@ -274,9 +274,9 @@
          and then school one would really be better than school two in two ways. it both would be more effective it would have higher average achievement and it would be more equitable the relationship between social class and achievement would be lower. so everyone might not agree that those are good qualities of schools but, you better keep your 
         <EVENT DESC="LAUGH" />
          uh lack of agreement to yourselves because i think they're really important. okay. now, let's talk about, a lot of schools because, i mean, when you're talking about multi-level modeling you need a lotta schools. in this case, 
-        <PAUSE DUR=":13 PAUSE WHILE WRITING ON BOARD" />
+        <EVENT DUR=":13" DESC="PAUSE WHILE WRITING ON BOARD" />
          and we're gonna fix this little guy, a little bit. we're gonna center him. 
-        <EVENT DESC=":16 PAUSE WHILE WRITING ON BOARD" />
+        <EVENT DUR=":16" DESC="PAUSE WHILE WRITING ON BOARD" />
          so now we have, the achievement of student I in school J. we've got a lotta schools so we got, a lot of 'em, J is just what we use. is equal to the, intercept, the average achievement in school J, and the relationship between social class and achievement, this is B not I but B-one, J. because you wouldn't have B I (when) it doesn't_ this relationship wouldn't vary, for each student this is an average measure in each school, and we've just simply centered our, relationship_ i mean our our social class m- measure, in each school. so we've taken each child's, social class, and we have subtracted from that, the average social class in school J. and of course the average social class, could vary quite a lot across schools. 
         <PAUSE DUR=":05" />
          and then we still have an individual-level error term for, student I in school J. 
