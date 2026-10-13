@@ -194,8 +194,8 @@
                <desc>Mapping of original to BCP-47-compliant language codes.</desc>
                <!-- Initially in comment form. -->
                <!-- 
-                  HIN = Hindi = hi
-                  EST = Estonian = et
+                  HIN = Hindi = hi ?
+                  EST = Estonian = et ?
                   
                   NS = native speaker of English
                   NNS = non-native speaker of English
