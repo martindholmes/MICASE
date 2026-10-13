@@ -190,6 +190,21 @@
                <category n="TOU" xml:id="catSpeechEventType_TOU"><gloss>Tour</gloss></category>
             </taxonomy>
             
+            <taxonomy xml:id="taxLangEquivs">
+               <desc>Mapping of original to BCP-47-compliant language codes.</desc>
+               <!-- Initially in comment form. -->
+               <!-- 
+                  HIN = Hindi = hi
+                  EST = Estonian = et
+                  
+                  NS = native speaker of English
+                  NNS = non-native speaker of English
+                  NRN = near-native speaker of English
+                  NSO = native speaker of Other English ??? (what is that?)
+                  SS =  ???
+               -->
+            </taxonomy>
+            
          </classDecl>
       </encodingDesc>
    </teiHeader>
