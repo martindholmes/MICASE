@@ -37,11 +37,18 @@
     <xsl:param name="baseDir" as="xs:string" select="'..'"/>
     
     <xd:doc>
+        <xd:desc>The metadata taxonomies.</xd:desc>
+    </xd:doc>
+    <xsl:variable name="taxonomies" as="element(tei:taxonomy)+">
+        <xsl:sequence select="doc($baseDir || '/metadata/metadata.xml')//tei:taxonomy"/>
+    </xsl:variable>
+    
+    <xd:doc>
         <xd:desc>A map of all the metadata keys to their categories.</xd:desc>
     </xd:doc>
-    <xsl:variable name="mapmetaKeysToCategories" as="map(xs:string, element(tei:category))">
+    <xsl:variable name="mapMetaKeysToCategories" as="map(xs:string, element(tei:category))">
         <xsl:map>
-            <xsl:for-each select="doc($baseDir || '/metadata/metadata.xml')//tei:taxonomy">
+            <xsl:for-each select="$taxonomies">
                 <xsl:variable name="taxId" as="xs:string" select="xs:string(@xml:id)"/>
                 <xsl:for-each select="descendant::category">
                     <xsl:map-entry key="concat($taxId, '_', xs:string(@n))" select="."/>
@@ -229,6 +236,21 @@
     </xsl:template>
     <xsl:template match="PROFILEDESC">
         <profileDesc>
+            <!-- First, we derive some catRefs from disguised metadata in the source. -->
+            <xsl:variable name="speechEventType" as="xs:string" select="upper-case(replace(ancestor::TEI.2/@ID, '^([a-z]+)\d.+$', '$1'))"/>
+            <xsl:variable name="academicDiscipline" as="xs:string" select="replace(ancestor::TEI.2/@ID, '^[a-z]+(\d+)[a-z].+$', '$1')"/>
+            <xsl:variable name="participantLevel" as="xs:string" select="upper-case(replace(ancestor::TEI.2/@ID, '^[a-z]+\d+([a-z]+)\d.+$', '$1'))"/>
+            <textClass>
+                <xsl:variable name="unknownCategory" as="xs:string" select="replace(ancestor::TEI.2/@ID, '^[a-z]+\d+[a-z]+(\d.+)$', '$1')"/>
+                <catRef scheme="taxSpeechEventType" target="{'cat:catSpeechEventType_' || $speechEventType}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catSpeechEventType_' || $speechEventType]/tei:gloss)}"/>
+                <catRef scheme="taxAcDisc" target="{'cat:catAcDisc_' || $academicDiscipline}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catAcDisc_' || $academicDiscipline]/tei:gloss)}"/>
+                <catRef scheme="taxPartLevel" target="{'cat:catPartLevel_' || $participantLevel}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catPartLevel_' || $participantLevel]/tei:gloss)}"/>
+                
+                <!-- Don't yet know what the last component of the id signifies. -->
+                
+            </textClass>
+            
+            
             <xsl:apply-templates select="@* | node()"/>
         </profileDesc>
     </xsl:template>
