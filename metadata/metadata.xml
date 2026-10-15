@@ -34,45 +34,45 @@
             
             <taxonomy xml:id="taxLang">
                <gloss>Language</gloss>
-               <category n="ARA" xml:id="catLang_ARA"><gloss>Arabic</gloss></category>
-               <category n="ARM" xml:id="catLang_ARM"><gloss>Armenian</gloss></category>
-               <category n="CAN" xml:id="catLang_CAN"><gloss>Cantonese</gloss></category>
-               <category n="CHI" xml:id="catLang_CHI"><gloss>Mandarin</gloss></category>
-               <category n="CZE" xml:id="catLang_CZE"><gloss>Czech</gloss></category>
-               <category n="DUT" xml:id="catLang_DUT"><gloss>Dutch</gloss></category>
-               <category n="EST" xml:id="catLang_EST"><gloss>Estonian</gloss></category>
-               <category n="FAR" xml:id="catLang_FAR"><gloss>Farsi</gloss></category>
-               <category n="FRE" xml:id="catLang_FRE"><gloss>French</gloss></category>
-               <category n="GER" xml:id="catLang_GER"><gloss>German</gloss></category>
-               <category n="GUJ" xml:id="catLang_GUJ"><gloss>Gujarati</gloss></category>
-               <category n="HEB" xml:id="catLang_HEB"><gloss>Hebrew</gloss></category>
-               <category n="HIN" xml:id="catLang_HIN"><gloss>Hindi</gloss></category>
-               <category n="HUN" xml:id="catLang_HUN"><gloss>Hungarian</gloss></category>
-               <category n="IBO" xml:id="catLang_IBO"><gloss>Ibo</gloss></category>
-               <category n="IND" xml:id="catLang_IND"><gloss>Indonesian</gloss></category>
-               <category n="ITA" xml:id="catLang_ITA"><gloss>Italian</gloss></category>
-               <category n="JAP" xml:id="catLang_JAP"><gloss>Japanese</gloss></category>
-               <category n="KAN" xml:id="catLang_KAN"><gloss>Kannada</gloss></category>
-               <category n="KOR" xml:id="catLang_KOR"><gloss>Korean</gloss></category>
-               <category n="MAC" xml:id="catLang_MAC"><gloss>Macedonian</gloss></category>
-               <category n="MAR" xml:id="catLang_MAR"><gloss>Marathi</gloss></category>
-               <category n="POL" xml:id="catLang_POL"><gloss>Polish</gloss></category>
-               <category n="POR" xml:id="catLang_POR"><gloss>Portuguese</gloss></category>
-               <category n="RUS" xml:id="catLang_RUS"><gloss>Russian</gloss></category>
-               <category n="SAE" xml:id="catLang_SAE"><gloss>South African English</gloss></category>
-               <category n="SLO" xml:id="catLang_SLO"><gloss>Slovak</gloss></category>
-               <category n="SPA" xml:id="catLang_SPA"><gloss>Spanish</gloss></category>
-               <category n="SWA" xml:id="catLang_SWA"><gloss>Swahili</gloss></category>
-               <category n="SWE" xml:id="catLang_SWE"><gloss>Swedish</gloss></category>
-               <category n="TAG" xml:id="catLang_TAG"><gloss>Tagalog</gloss></category>
-               <category n="TEL" xml:id="catLang_TEL"><gloss>Telegu</gloss></category>
-               <category n="THA" xml:id="catLang_THA"><gloss>Thai</gloss></category>
-               <category n="TUR" xml:id="catLang_TUR"><gloss>Turkish</gloss></category>
-               <category n="UKE" xml:id="catLang_UKE"><gloss>British English</gloss></category>
-               <category n="UKR" xml:id="catLang_UKR"><gloss>Ukrainian</gloss></category>
-               <category n="UNK" xml:id="catLang_UNK"><gloss>Unknown</gloss></category>
-               <category n="URD" xml:id="catLang_URD"><gloss>Urdu</gloss></category>
-               <category n="VIE" xml:id="catLang_VIE"><gloss>Vietnamese</gloss></category>
+               <category n="ARA" xml:id="catLang_ARA" ana="ar"><gloss>Arabic</gloss></category>
+               <category n="ARM" xml:id="catLang_ARM" ana="hy"><gloss>Armenian</gloss></category>
+               <category n="CAN" xml:id="catLang_CAN" ana="yue"><gloss>Cantonese</gloss></category>
+               <category n="CHI" xml:id="catLang_CHI" ana="zh-cmn"><gloss>Mandarin</gloss></category>
+               <category n="CZE" xml:id="catLang_CZE" ana="cs"><gloss>Czech</gloss></category>
+               <category n="DUT" xml:id="catLang_DUT" ana="nl"><gloss>Dutch</gloss></category>
+               <category n="EST" xml:id="catLang_EST" ana="et"><gloss>Estonian</gloss></category>
+               <category n="FAR" xml:id="catLang_FAR" ana="fa"><gloss>Farsi</gloss></category>
+               <category n="FRE" xml:id="catLang_FRE" ana="fr"><gloss>French</gloss></category>
+               <category n="GER" xml:id="catLang_GER" ana="de"><gloss>German</gloss></category>
+               <category n="GUJ" xml:id="catLang_GUJ" ana="gu"><gloss>Gujarati</gloss></category>
+               <category n="HEB" xml:id="catLang_HEB" ana="he"><gloss>Hebrew</gloss></category>
+               <category n="HIN" xml:id="catLang_HIN" ana="hi"><gloss>Hindi</gloss></category>
+               <category n="HUN" xml:id="catLang_HUN" ana="hu"><gloss>Hungarian</gloss></category>
+               <category n="IBO" xml:id="catLang_IBO" ana="ig"><gloss>Ibo/Igbo</gloss></category>
+               <category n="IND" xml:id="catLang_IND" ana="id"><gloss>Indonesian</gloss></category>
+               <category n="ITA" xml:id="catLang_ITA" ana="it"><gloss>Italian</gloss></category>
+               <category n="JAP" xml:id="catLang_JAP" ana="ja"><gloss>Japanese</gloss></category>
+               <category n="KAN" xml:id="catLang_KAN" ana="kn"><gloss>Kannada</gloss></category>
+               <category n="KOR" xml:id="catLang_KOR" ana="ko"><gloss>Korean</gloss></category>
+               <category n="MAC" xml:id="catLang_MAC" ana="mk"><gloss>Macedonian</gloss></category>
+               <category n="MAR" xml:id="catLang_MAR" ana="mr"><gloss>Marathi</gloss></category>
+               <category n="POL" xml:id="catLang_POL" ana="pl"><gloss>Polish</gloss></category>
+               <category n="POR" xml:id="catLang_POR" ana="pt"><gloss>Portuguese</gloss></category>
+               <category n="RUS" xml:id="catLang_RUS" ana="ru"><gloss>Russian</gloss></category>
+               <category n="SAE" xml:id="catLang_SAE" ana="en-ZA"><gloss>South African English</gloss></category>
+               <category n="SLO" xml:id="catLang_SLO" ana="sk"><gloss>Slovak</gloss></category>
+               <category n="SPA" xml:id="catLang_SPA" ana="es"><gloss>Spanish</gloss></category>
+               <category n="SWA" xml:id="catLang_SWA" ana="sw"><gloss>Swahili</gloss></category>
+               <category n="SWE" xml:id="catLang_SWE" ana="sv"><gloss>Swedish</gloss></category>
+               <category n="TAG" xml:id="catLang_TAG" ana="tl"><gloss>Tagalog</gloss></category>
+               <category n="TEL" xml:id="catLang_TEL" ana="te"><gloss>Telegu</gloss></category>
+               <category n="THA" xml:id="catLang_THA" ana="gh"><gloss>Thai</gloss></category>
+               <category n="TUR" xml:id="catLang_TUR" ana="tr"><gloss>Turkish</gloss></category>
+               <category n="UKE" xml:id="catLang_UKE" ana="en-GB"><gloss>British English</gloss></category>
+               <category n="UKR" xml:id="catLang_UKR" ana="uk"><gloss>Ukrainian</gloss></category>
+               <category n="UNK" xml:id="catLang_UNK" ana="und"><gloss>Unknown</gloss></category>
+               <category n="URD" xml:id="catLang_URD" ana="ur"><gloss>Urdu</gloss></category>
+               <category n="VIE" xml:id="catLang_VIE" ana="ci"><gloss>Vietnamese</gloss></category>
             </taxonomy>
             
             <taxonomy xml:id="taxAcDiv">
