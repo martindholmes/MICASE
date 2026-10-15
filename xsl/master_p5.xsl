@@ -32,15 +32,15 @@
     <xsl:mode on-no-match="shallow-copy"/>
     
     <xd:doc>
-        <xd:desc>For clarity, we use a basedir from the Ant build file.</xd:desc>
+        <xd:desc>For clarity, we use a projDir from the Ant build file.</xd:desc>
     </xd:doc>
-    <xsl:param name="baseDir" as="xs:string" select="'..'"/>
+    <xsl:param name="projDir" as="xs:string" select="'..'"/>
     
     <xd:doc>
         <xd:desc>The metadata taxonomies.</xd:desc>
     </xd:doc>
     <xsl:variable name="taxonomies" as="element(tei:taxonomy)+">
-        <xsl:sequence select="doc($baseDir || '/metadata/metadata.xml')//tei:taxonomy"/>
+        <xsl:sequence select="doc($projDir || '/metadata/metadata.xml')//tei:taxonomy"/>
     </xsl:variable>
     
     <xd:doc>
@@ -76,7 +76,7 @@
     <xd:doc>
         <xd:desc>This is the source XML.</xd:desc>
     </xd:doc>
-    <xsl:variable name="xmlSource" as="document-node()+" select="collection($baseDir || '/data/?select=*.xml;recurse=yes')"/>
+    <xsl:variable name="xmlSource" as="document-node()+" select="collection($projDir || '/data/?select=*.xml;recurse=yes')"/>
     
     <xd:doc>
         <xd:desc>The root template calls each of the individual diagnostic processes.</xd:desc>
@@ -90,7 +90,7 @@
                 <!-- Single file input, dev/testing scenario. -->
                 <xsl:variable name="currId" as="xs:string" select="xs:string(/TEI.2/@ID)"/>
                 <xsl:message>Processing document {TEI.2/@ID}</xsl:message>
-                <xsl:result-document href="{$baseDir}/p5/{$currId}.xml">
+                <xsl:result-document href="{$projDir}/p5/{$currId}.xml">
                     <xsl:apply-templates/>
                 </xsl:result-document>
             </xsl:when>
@@ -99,7 +99,7 @@
                 <xsl:for-each select="$xmlSource[TEI.2/@ID = $docsToBuildIds or $docsToBuild eq '']">
                     <xsl:variable name="currId" as="xs:string" select="xs:string(TEI.2/@ID)"/>
                     <xsl:message>Processing document {TEI.2/@ID}</xsl:message>
-                    <xsl:result-document href="{$baseDir}/p5/{$currId}.xml">
+                    <xsl:result-document href="{$projDir}/p5/{$currId}.xml">
                         <xsl:apply-templates/>
                     </xsl:result-document>
                 </xsl:for-each>
