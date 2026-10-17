@@ -128,6 +128,7 @@
             schematypens="http://purl.oclc.org/dsdl/schematron</xsl:processing-instruction>
         <xsl:sequence select="'&#x0a;&#x0a;'"/>
         <TEI>
+            <xsl:attribute name="n" select="$idBits[4]"/>
             <xsl:apply-templates select="@* | node()">
                 <xsl:with-param name="idBits" as="xs:string+" select="$idBits" tunnel="yes"/>
             </xsl:apply-templates>
@@ -235,19 +236,16 @@
         </name>
     </xsl:template>
     <xsl:template match="PROFILEDESC">
+        <xsl:param name="idBits" as="xs:string+" tunnel="yes"/>
         <profileDesc>
             <!-- First, we derive some catRefs from disguised metadata in the source. -->
-            <xsl:variable name="speechEventType" as="xs:string" select="upper-case(replace(ancestor::TEI.2/@ID, '^([a-z]+)\d.+$', '$1'))"/>
-            <xsl:variable name="academicDiscipline" as="xs:string" select="replace(ancestor::TEI.2/@ID, '^[a-z]+(\d+)[a-z].+$', '$1')"/>
-            <xsl:variable name="participantLevel" as="xs:string" select="upper-case(replace(ancestor::TEI.2/@ID, '^[a-z]+\d+([a-z]+)\d.+$', '$1'))"/>
+            <xsl:variable name="speechEventType" as="xs:string" select="upper-case($idBits[1])"/>
+            <xsl:variable name="academicDiscipline" as="xs:string" select="$idBits[2]"/>
+            <xsl:variable name="participantLevel" as="xs:string" select="upper-case($idBits[3])"/>
             <textClass>
-                <xsl:variable name="unknownCategory" as="xs:string" select="replace(ancestor::TEI.2/@ID, '^[a-z]+\d+[a-z]+(\d.+)$', '$1')"/>
                 <catRef scheme="taxSpeechEventType" target="{'cat:catSpeechEventType_' || $speechEventType}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catSpeechEventType_' || $speechEventType]/tei:gloss)}"/>
                 <catRef scheme="taxAcDisc" target="{'cat:catAcDisc_' || $academicDiscipline}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catAcDisc_' || $academicDiscipline]/tei:gloss)}"/>
                 <catRef scheme="taxPartLevel" target="{'cat:catPartLevel_' || $participantLevel}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catPartLevel_' || $participantLevel]/tei:gloss)}"/>
-                
-                <!-- Don't yet know what the last component of the id signifies. -->
-                
             </textClass>
             
             
