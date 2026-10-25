@@ -247,7 +247,7 @@
                 <catRef scheme="taxAcDisc" target="{'cat:catAcDisc_' || $academicDiscipline}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catAcDisc_' || $academicDiscipline]/tei:gloss)}"/>
                 <catRef scheme="taxPartLevel" target="{'cat:catPartLevel_' || $participantLevel}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catPartLevel_' || $participantLevel]/tei:gloss)}"/>
                 
-                <!-- Now we discern the academic division from an abbreviation in the title element. -->
+                <!-- We discern the academic division from an abbreviation in the title element. -->
                 <xsl:variable name="acDiv" as="xs:string?" select="replace(normalize-space(//TITLE[contains(., 'Rackham')]), '^.*Rackham\s*Div:\s*([A-Z]+)[^A-Z]*$', '$1')"/>
                 <xsl:choose>
                     <xsl:when test="$acDiv = ('BS', 'HA', 'NA', 'PS', 'SS')">
@@ -255,6 +255,17 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:message terminate="yes" select="'Unable to find academic division corresponding to Rackham Div: ' || $acDiv"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+                
+                <!-- We figure out the interactivity rating from a P element in the PROFILEDESC. -->
+                <xsl:variable name="interacRating" as="xs:string?" select="replace(normalize-space(//LANGUSAGE/P[contains(., 'Interactivity Rating')]), '^.*Interactivity Rating:\s*([A-Z]+)[^A-Z]*$', '$1')"/>
+                <xsl:choose>
+                    <xsl:when test="$interacRating = ('HI', 'HM', 'MI', 'MM', 'MX')">
+                        <catRef scheme="taxInteractivity" target="cat:catInteractivity_{$interacRating}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catInteractivity_' || $interacRating]/tei:gloss)}"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message terminate="yes" select="'Unable to find Interactivity Rating corresponding to Interactivity Rating: ' || $acDiv"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </textClass>
@@ -289,13 +300,12 @@
         </xsl:if>
     </xsl:template>
     <xsl:template match="LANGUAGE">
-        <language>
-            <xsl:apply-templates select="@* | node()"/>
-        </language>
+        <language><xsl:apply-templates select="@* | node()"/></language>
     </xsl:template>
     <xsl:template match="LANGUAGE/@ID">
         <xsl:attribute name="ident" select="."/>
     </xsl:template>
+    <xsl:template match="LANGUAGE/text()"><xsl:sequence select="normalize-space(.)"/></xsl:template>
     <xd:doc>
         <xd:desc>Suppress these because we'll handle them in textDesc.</xd:desc>
     </xd:doc>
