@@ -246,8 +246,18 @@
                 <catRef scheme="taxSpeechEventType" target="{'cat:catSpeechEventType_' || $speechEventType}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catSpeechEventType_' || $speechEventType]/tei:gloss)}"/>
                 <catRef scheme="taxAcDisc" target="{'cat:catAcDisc_' || $academicDiscipline}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catAcDisc_' || $academicDiscipline]/tei:gloss)}"/>
                 <catRef scheme="taxPartLevel" target="{'cat:catPartLevel_' || $participantLevel}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catPartLevel_' || $participantLevel]/tei:gloss)}"/>
+                
+                <!-- Now we discern the academic division from an abbreviation in the title element. -->
+                <xsl:variable name="acDiv" as="xs:string?" select="replace(normalize-space(//TITLE[contains(., 'Rackham')]), '^.*Rackham\s*Div:\s*([A-Z]+)[^A-Z]*$', '$1')"/>
+                <xsl:choose>
+                    <xsl:when test="$acDiv = ('BS', 'HA', 'NA', 'PS', 'SS')">
+                        <catRef scheme="taxAcDiv" target="cat:catAcDiv_{$acDiv}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catAcDiv_' || $acDiv]/tei:gloss)}"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message terminate="yes" select="'Unable to find academic division corresponding to Rackham Div: ' || $acDiv"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </textClass>
-            
             
             <xsl:apply-templates select="@* | node()"/>
         </profileDesc>
