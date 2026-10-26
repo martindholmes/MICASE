@@ -132,12 +132,11 @@ p {
   font-style: italic;
   font-size: 0.95rem;
 }
-ul {
+ul, ol {
   margin: 1em;
 }
 li {
-  margin-top: 0.512em;
-  margin-left: 0.512em;
+  margin: 0.512em;
 }
 
 li > ul {

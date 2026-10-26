@@ -329,11 +329,6 @@
                     <p><xsl:value-of select="@LANG"/></p>
                 </langKnowledge>
             </xsl:if>
-            <xsl:if test="@LANG">
-                <langKnowledge>
-                    <p><xsl:value-of select="@LANG"/></p>
-                </langKnowledge>
-            </xsl:if>
             <xsl:if test="@RESTRICT">
                 <trait>
                     <label>Restriction</label>

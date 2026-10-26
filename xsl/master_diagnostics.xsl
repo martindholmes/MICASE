@@ -8,6 +8,7 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xh="http://www.w3.org/1999/xhtml"
     xmlns:hcmc="http://hcmc.uvic.ca/ns"
+    xmlns:tei="http://www.tei-c.org/ns/1.0"
     expand-text="yes"
     version="3.0">
     <xd:doc scope="stylesheet">
@@ -48,6 +49,11 @@
     <xsl:variable name="xmlSource" as="document-node()+" select="collection($baseDir || '/data/?select=*.xml;recurse=yes')"/>
     
     <xd:doc>
+        <xd:desc>This is the generated P5 XML.</xd:desc>
+    </xd:doc>
+    <xsl:variable name="xmlP5" as="document-node()+" select="collection($baseDir || '/p5/?select=*.xml;recurse=yes')"/>
+    
+    <xd:doc>
         <xd:desc>The root template calls each of the individual diagnostic processes.</xd:desc>
     </xd:doc>
     <xsl:template match="/">
@@ -70,6 +76,7 @@
                         <xsl:choose>
                             <xsl:when test="$runOnly eq ''">
                                 <xsl:call-template name="statistics"/>
+                                <xsl:call-template name="checkOutputLength"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <!-- Run only the one(s) that are being called. -->
@@ -130,6 +137,40 @@
                 </details>
             </div>
         </div>
+    </xsl:template>
+    
+    <xd:doc>
+        <xd:desc>This checks the length of the P5 output against the length of the original
+        input, looking for any meaningful discrepancies.</xd:desc>
+    </xd:doc>
+    <xsl:template name="checkOutputLength" match="xsl:template[@name='checkOutputLength']" as="element(xh:details)">
+        <xsl:variable name="output" as="element(xh:ol)?">
+            <xsl:where-populated>
+                <ol>
+                    <xsl:for-each select="$xmlSource//TEI.2">
+                        <xsl:sort select="@ID"/>
+                        <xsl:variable name="id" select="@ID"/>
+                        <xsl:variable name="p5" as="element(tei:TEI)" select="$xmlP5//tei:TEI[@xml:id eq $id]"/>
+                        <xsl:variable name="lenSource" as="xs:integer" select="string-length(normalize-space(//TEXT))"/>
+                        <xsl:variable name="lenP5" as="xs:integer" select="string-length(normalize-space($p5/tei:text))"/>
+                        <xsl:if test="not($lenSource eq $lenP5)">
+                            <li>
+                                Lengths for file with id <xsl:value-of select="$id"/>:<br/>
+                                <xsl:value-of select="$lenSource"/> (source)<br/>
+                                <xsl:value-of select="$lenP5"/> (P5)
+                            </li>
+                        </xsl:if>
+                    </xsl:for-each>
+                </ol>
+            </xsl:where-populated>
+        </xsl:variable>
+        <details>
+            <summary>Discrepancies in output length (<xsl:value-of select="count($output//xh:li)"/> / <xsl:value-of select="count($xmlSource)"/>)</summary>
+            <p>This checks the input TEI.2 transcription length against the length of the output
+            P5 transcription, to look for any meaningful discrepancies.</p>
+            
+            <xsl:sequence select="$output"/>
+        </details>
     </xsl:template>
     
 </xsl:stylesheet>
