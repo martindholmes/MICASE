@@ -54,6 +54,12 @@
         <include name="**/*"/>
       </fileset>
     </delete>
+    <delete includeemptydirs="true">
+      <fileset dir="diffs">
+        <include name="*"/>
+        <include name="**/*"/>
+      </fileset>
+    </delete>
   </target>
 
   <target name="gitHashForSuffix">

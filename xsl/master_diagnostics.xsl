@@ -28,6 +28,12 @@
         normalization-form="NFC" indent="yes" exclude-result-prefixes="#all" include-content-type="no"/>
     
     <xd:doc>
+        <xd:desc>This mode tries to align the text output from the original and P5 versions
+        so that they can be compared.</xd:desc>
+    </xd:doc>
+    <xsl:mode name="descToText" on-no-match="shallow-skip"/>
+    
+    <xd:doc>
         <xd:desc>For clarity, we use a basedir from the Ant build file.</xd:desc>
     </xd:doc>
     <xsl:param name="baseDir" as="xs:string" select="'..'"/>
@@ -96,7 +102,10 @@
             <xsl:sort select="@ID"/>
             <xsl:variable name="id" select="@ID"/>
             <xsl:variable name="p5" as="element(tei:TEI)" select="$xmlP5//tei:TEI[@xml:id eq $id]"/>
-            <xsl:variable name="lenSource" as="xs:integer" select="string-length(normalize-space(//TEXT))"/>
+            <xsl:variable name="sourceAsText" as="xs:string*">
+                <xsl:apply-templates select="//TEXT" mode="descToText"/>
+            </xsl:variable>
+            <xsl:variable name="lenSource" as="xs:integer" select="string-length(normalize-space(string-join($sourceAsText, '')))"/>
             <xsl:variable name="lenP5" as="xs:integer" select="string-length(normalize-space($p5/tei:text))"/>
             <xsl:if test="not($lenSource eq $lenP5)">
                 <xsl:result-document href="{$baseDir}/diffs/{$id}_orig.txt" method="text">
@@ -107,8 +116,22 @@
                 </xsl:result-document>
             </xsl:if>
         </xsl:for-each>
-        
-        
+    </xsl:template>
+    
+    <xd:doc>
+        <xd:desc>This template outputs the text() nodes as text.</xd:desc>
+    </xd:doc>
+    <xsl:template match="text()" mode="descToText">
+        <xsl:value-of select="."/>
+    </xsl:template>
+    
+    <xd:doc>
+        <xd:desc>This template outputs the EVENT/@DESC value as text, so that it aligns with 
+        the way P5 handles this information, enabling a proper comparison of the content of
+        the output against the original.</xd:desc>
+    </xd:doc>
+    <xsl:template match="EVENT/@DESC" mode="descToText">
+        <xsl:value-of select="."/>
     </xsl:template>
     
     <xd:doc>
@@ -176,7 +199,10 @@
                         <xsl:sort select="@ID"/>
                         <xsl:variable name="id" select="@ID"/>
                         <xsl:variable name="p5" as="element(tei:TEI)" select="$xmlP5//tei:TEI[@xml:id eq $id]"/>
-                        <xsl:variable name="lenSource" as="xs:integer" select="string-length(normalize-space(//TEXT))"/>
+                        <xsl:variable name="sourceAsText" as="xs:string*">
+                            <xsl:apply-templates select="//TEXT" mode="descToText"/>
+                        </xsl:variable>
+                        <xsl:variable name="lenSource" as="xs:integer" select="string-length(normalize-space(string-join($sourceAsText, '')))"/>T))"/>
                         <xsl:variable name="lenP5" as="xs:integer" select="string-length(normalize-space($p5/tei:text))"/>
                         <xsl:if test="not($lenSource eq $lenP5)">
                             <li>
