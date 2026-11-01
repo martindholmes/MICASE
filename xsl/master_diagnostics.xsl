@@ -160,7 +160,13 @@
     
     <xd:doc>
         <xd:desc>This checks the length of the P5 output against the length of the original
-        input, looking for any meaningful discrepancies.</xd:desc>
+        input, looking for any meaningful discrepancies.
+        NOTE for next fix: The incident/desc element in P5 replaces the EVENT/@DESC attribute in 
+        TEI.2, meaning that its values are interpolated as text in the output. Either this should
+        be reconsidered in the generation of P5, or the comparison done here should first eliminate
+        all incident elements from P5, or conversely it should realize the TEI.2 EVENT/@DESC as text
+        in the output, to allow for a meaningful comparison. The last is probably best, since it would
+        ensure that content is included in the comparison.</xd:desc>
     </xd:doc>
     <xsl:template name="checkOutputLength" match="xsl:template[@name='checkOutputLength']" as="element(xh:details)">
         <xsl:variable name="output" as="element(xh:ol)?">
