@@ -90,6 +90,25 @@
                 </body>
             </html>
         </xsl:result-document>
+        
+        <!-- Now some diagnostic outputs that make it easier to find problems with the conversion. -->
+        <xsl:for-each select="$xmlSource//TEI.2">
+            <xsl:sort select="@ID"/>
+            <xsl:variable name="id" select="@ID"/>
+            <xsl:variable name="p5" as="element(tei:TEI)" select="$xmlP5//tei:TEI[@xml:id eq $id]"/>
+            <xsl:variable name="lenSource" as="xs:integer" select="string-length(normalize-space(//TEXT))"/>
+            <xsl:variable name="lenP5" as="xs:integer" select="string-length(normalize-space($p5/tei:text))"/>
+            <xsl:if test="not($lenSource eq $lenP5)">
+                <xsl:result-document href="{$baseDir}/diffs/{$id}_orig.txt" method="text">
+                    <xsl:sequence select="string-join(tokenize(normalize-space(//TEXT), '\.'), '.&#x0a;')"/>
+                </xsl:result-document>
+                <xsl:result-document href="{$baseDir}/diffs/{$id}_p5.txt" method="text">
+                    <xsl:sequence select="string-join(tokenize(normalize-space($p5/tei:text), '\.'), '.&#x0a;')"/>
+                </xsl:result-document>
+            </xsl:if>
+        </xsl:for-each>
+        
+        
     </xsl:template>
     
     <xd:doc>
