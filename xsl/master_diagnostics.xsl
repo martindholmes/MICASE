@@ -109,7 +109,7 @@
             <xsl:variable name="lenP5" as="xs:integer" select="string-length(normalize-space($p5/tei:text))"/>
             <xsl:if test="not($lenSource eq $lenP5)">
                 <xsl:result-document href="{$baseDir}/diffs/{$id}_orig.txt" method="text">
-                    <xsl:sequence select="string-join(tokenize(normalize-space(//TEXT), '\.'), '.&#x0a;')"/>
+                    <xsl:sequence select="string-join(tokenize(normalize-space(string-join($sourceAsText, '')), '\.'), '.&#x0a;')"/>
                 </xsl:result-document>
                 <xsl:result-document href="{$baseDir}/diffs/{$id}_p5.txt" method="text">
                     <xsl:sequence select="string-join(tokenize(normalize-space($p5/tei:text), '\.'), '.&#x0a;')"/>
@@ -130,8 +130,9 @@
         the way P5 handles this information, enabling a proper comparison of the content of
         the output against the original.</xd:desc>
     </xd:doc>
-    <xsl:template match="EVENT/@DESC" mode="descToText">
-        <xsl:value-of select="."/>
+    <xsl:template match="EVENT[@DESC]" mode="descToText">
+        <!--<xsl:message>FOUND EVENT...</xsl:message>-->
+        <xsl:sequence select="xs:string(@DESC)"/>
     </xsl:template>
     
     <xd:doc>
@@ -202,7 +203,8 @@
                         <xsl:variable name="sourceAsText" as="xs:string*">
                             <xsl:apply-templates select="//TEXT" mode="descToText"/>
                         </xsl:variable>
-                        <xsl:variable name="lenSource" as="xs:integer" select="string-length(normalize-space(string-join($sourceAsText, '')))"/>T))"/>
+                        <!--<xsl:message>{$sourceAsText}</xsl:message>-->
+                        <xsl:variable name="lenSource" as="xs:integer" select="string-length(normalize-space(string-join($sourceAsText, '')))"/>))"/>
                         <xsl:variable name="lenP5" as="xs:integer" select="string-length(normalize-space($p5/tei:text))"/>
                         <xsl:if test="not($lenSource eq $lenP5)">
                             <li>
