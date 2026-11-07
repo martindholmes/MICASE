@@ -378,7 +378,7 @@
     
     <xsl:template match="U[child::U]">
         <xsl:variable name="currU" as="element(U)" select="."/>
-        <xsl:for-each select="child::text()[normalize-space(.)] | child::OVERLAP | child::U">
+        <xsl:for-each select="child::text()[normalize-space(.)] | child::OVERLAP | child::U | child::FOREIGN | child::EVENT | child::GAP | child::SEG | child::SIC | child::WRITING">
             <xsl:choose>
                 <xsl:when test="self::U"><xsl:text>
                     </xsl:text><u trans="overlap">
@@ -387,6 +387,9 @@
                 </xsl:when>
                 <xsl:when test="self::OVERLAP">
                     <u who="{$currU/@WHO}"><xsl:apply-templates select="."/></u>
+                </xsl:when>
+                <xsl:when test="child::FOREIGN | self::EVENT | self::GAP">
+                    <xsl:apply-templates select="."/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>

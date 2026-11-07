@@ -130,9 +130,9 @@
         the way P5 handles this information, enabling a proper comparison of the content of
         the output against the original.</xd:desc>
     </xd:doc>
-    <xsl:template match="EVENT[@DESC]" mode="descToText">
+    <xsl:template match="EVENT[@DESC] | GAP[@DESC]" mode="descToText">
         <!--<xsl:message>FOUND EVENT...</xsl:message>-->
-        <xsl:sequence select="xs:string(@DESC)"/>
+        <xsl:sequence select="' ' || xs:string(@DESC) || ' '"/>
     </xsl:template>
     
     <xd:doc>
@@ -204,7 +204,7 @@
                             <xsl:apply-templates select="//TEXT" mode="descToText"/>
                         </xsl:variable>
                         <!--<xsl:message>{$sourceAsText}</xsl:message>-->
-                        <xsl:variable name="lenSource" as="xs:integer" select="string-length(normalize-space(string-join($sourceAsText, '')))"/>))"/>
+                        <xsl:variable name="lenSource" as="xs:integer" select="string-length(normalize-space(string-join($sourceAsText, '')))"/>
                         <xsl:variable name="lenP5" as="xs:integer" select="string-length(normalize-space($p5/tei:text))"/>
                         <xsl:if test="not($lenSource eq $lenP5)">
                             <li>
