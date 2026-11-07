@@ -9,6 +9,7 @@
     xmlns:xh="http://www.w3.org/1999/xhtml"
     xmlns:hcmc="http://hcmc.uvic.ca/ns"
     xmlns:tei="http://www.tei-c.org/ns/1.0"
+    xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     expand-text="yes"
     version="3.0">
     <xd:doc scope="stylesheet">
@@ -83,6 +84,7 @@
                             <xsl:when test="$runOnly eq ''">
                                 <xsl:call-template name="statistics"/>
                                 <xsl:call-template name="checkOutputLength"/>
+                                <xsl:call-template name="checkSpeakers"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <!-- Run only the one(s) that are being called. -->
@@ -224,6 +226,69 @@
             
             <xsl:sequence select="$output"/>
         </details>
+    </xsl:template>
+    
+    <xd:doc>
+        <xd:desc>This is an attempt to provide some assurance that every piece of text which is a direct child of
+        an utterance has the same speaker in the source file as in the P5 file, just to make sure that we are 
+        not unravelling nested utterances incorrectly. We don't check every single text node, since some would
+        be very hard to manage, but we check most, which should be enough for our purposes.</xd:desc>
+    </xd:doc>
+    <xsl:template name="checkSpeakers" match="xsl:template[@name='checkSpeakers']" as="element(xh:details)">
+        <xsl:variable name="output" as="element(xh:ol)?">
+            <xsl:where-populated>
+                <ol>
+                    <xsl:for-each select="$xmlSource//TEI.2">
+                        <xsl:sort select="@ID"/>
+                        <xsl:variable name="id" select="@ID"/>
+                        <xsl:variable name="p5" as="element(tei:TEI)" select="$xmlP5//tei:TEI[@xml:id eq $id]"/>
+                        <!-- First we create a map of all qualifying text nodes to their speakers. -->
+                        <xsl:variable name="mapTextNodesToSpeakers" as="map(xs:string, xs:string)">
+                            <xsl:map>
+                                <xsl:for-each select="//U/text()[string-length(normalize-space(.)) gt 5]">
+                                    <xsl:variable name="currNode" as="node()" select="."/>
+                                    <xsl:variable name="currText" as="xs:string" select="normalize-space(.)"/>
+                                    <xsl:if test="not(following::text()[normalize-space(.) eq $currText]) and not(preceding::text()[normalize-space(.) eq $currText])">
+                                        <xsl:map-entry key="$currText" select="'#' || ancestor::U[@WHO][1]/@WHO"/>
+                                    </xsl:if>
+                                </xsl:for-each>
+                            </xsl:map>
+                        </xsl:variable>
+                        
+                        <!--<xsl:message>Checking speakers in {$id}; created a map of {map:size($mapTextNodesToSpeakers)}...</xsl:message>-->
+                        
+                        <!-- Now we check the P5 text nodes to see that they all match. -->
+                        <xsl:for-each select="$p5//tei:u/text()[string-length(normalize-space(.)) gt 5]">
+                            <xsl:variable name="currText" as="xs:string" select="normalize-space(.)"/>
+                            <xsl:if test="not(following::text()[normalize-space(.) eq $currText]) and not(preceding::text()[normalize-space(.) eq $currText])">
+                                <!--<xsl:message>Checking string: {$currText}...</xsl:message>-->
+                                <xsl:if test="map:contains($mapTextNodesToSpeakers, $currText)">
+                                    <xsl:variable name="p5Speaker" as="xs:string" select="xs:string(parent::tei:u/@who)"/>
+                                    <xsl:variable name="sourceSpeaker" as="xs:string" select="map:get($mapTextNodesToSpeakers, $currText)"/>
+                                    <!--<xsl:message>Checking {$currText}: orig speaker={$sourceSpeaker}, P5 speaker={$p5Speaker}</xsl:message>-->
+                                    <xsl:if test="not($p5Speaker eq $sourceSpeaker)">
+                                        <li>In file with id <xsl:value-of select="$id"/>, the following text node in the source:
+                                            <q><xsl:value-of select="$currText"/></q><br/>
+                                            has speaker <xsl:value-of select="$sourceSpeaker"/>, while the P5 equivalent has
+                                            source speaker <xsl:value-of select="$p5Speaker"/>
+                                        </li>
+                                    </xsl:if>
+                                </xsl:if>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:for-each>
+                </ol>
+            </xsl:where-populated>
+        </xsl:variable>
+        
+        <details>
+            <summary>Discrepancies in speaker assignments for specific text nodes (<xsl:value-of select="count($output//xh:li)"/>)</summary>
+            <p>This checks the input TEI.2 transcription length against the length of the output
+                P5 transcription, to look for any meaningful discrepancies.</p>
+            
+            <xsl:sequence select="$output"/>
+        </details>
+        
     </xsl:template>
     
 </xsl:stylesheet>

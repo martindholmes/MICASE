@@ -9,6 +9,7 @@
     xmlns:tei="http://www.tei-c.org/ns/1.0"
     xmlns:xh="http://www.w3.org/1999/xhtml"
     xmlns:hcmc="http://hcmc.uvic.ca/ns"
+    xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     expand-text="yes"
     version="3.0">
     <xd:doc scope="stylesheet">
