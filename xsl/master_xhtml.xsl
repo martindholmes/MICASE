@@ -4,7 +4,7 @@
     xmlns:math="http://www.w3.org/2005/xpath-functions/math"
     xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
     exclude-result-prefixes="#all"
-    xpath-default-namespace=""
+    xpath-default-namespace="http://www.tei-c.org/ns/1.0"
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xh="http://www.w3.org/1999/xhtml"
     xmlns:hcmc="http://hcmc.uvic.ca/ns"
@@ -40,16 +40,26 @@
     </xd:doc>
     <xsl:variable name="docsToBuildIds" as="xs:string*" select="tokenize($docsToBuild, '\s*,\s*')"/>
     
-    <xd:doc scope="component">
+    <xd:doc>
         <xd:desc><xd:ref name="docRoot">docRoot</xd:ref> is needed in various contexts where the input
             document is out of scope.</xd:desc>
     </xd:doc>
     <xsl:variable name="docRoot" select="/"/>
     
     <xd:doc>
-        <xd:desc>This is the source XML.</xd:desc>
+        <xd:desc>For the page template we process, the mode is basically an identity transform.</xd:desc>
     </xd:doc>
-    <xsl:variable name="xmlSource" as="document-node()+" select="collection($baseDir || '/data/?select=*.xml;recurse=yes')"/>
+    <xsl:mode on-no-match="shallow-copy"/>
+    
+    <xd:doc>
+        <xd:desc>This is the page template that will be used for all the pages.</xd:desc>
+    </xd:doc>
+    <xsl:variable name="pageTemplate" as="document-node()" select="doc($baseDir || '/templates/pageTemplate.xml')"/>
+    
+    <xd:doc>
+        <xd:desc>This is the source XML: P5 generated from the original TEI.2 data.</xd:desc>
+    </xd:doc>
+    <xsl:variable name="xmlSource" as="document-node()+" select="collection($baseDir || '/p5/?select=*.xml;recurse=yes')"/>
     
     <xd:doc>
         <xd:desc>The root template calls each of the individual diagnostic processes.</xd:desc>
@@ -58,11 +68,14 @@
         <xsl:message>Building site...</xsl:message>
         <xsl:message>$docsToBuild = {$docsToBuild}</xsl:message>
         
-        <xsl:for-each select="$xmlSource[TEI.2/@ID = $docsToBuildIds or $docsToBuild eq '']">
-            <xsl:variable name="currId" as="xs:string" select="xs:string(TEI.2/@ID)"/>
-            <xsl:message>Processing document {TEI.2/@ID}</xsl:message>
+        <xsl:for-each select="$xmlSource[(TEI/@xml:id = $docsToBuildIds) or ($docsToBuild eq '')]">
+            <xsl:variable name="currId" as="xs:string" select="xs:string(TEI/@xml:id)"/>
+            <xsl:message>Processing document {$currId}</xsl:message>
             <xsl:result-document href="{$baseDir}/site/{$currId}.html">
-                
+                <xsl:apply-templates select="$pageTemplate/xh:html">
+                    <xsl:with-param name="currId" as="xs:string" select="$currId" tunnel="yes"/>
+                    <xsl:with-param name="currP5" as="document-node()" select="." tunnel="yes"/>
+                </xsl:apply-templates>
             </xsl:result-document>
         </xsl:for-each>
         
