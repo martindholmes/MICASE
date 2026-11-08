@@ -1,15 +1,15 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     
     <head xmlns="http://www.w3.org/1999/xhtml">
-        <title>Michigan Corpus of Academic Spoken English</title>
+        <title>MICASE: <?pageTitle?></title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="css/style.css" />
         <script src="js/ssHighlight.js"></script>
         <script src="js/sorttable.js"></script>
-        <script src="js/bbti.js"></script>
+        <script src="js/micase.js"></script>
         <link rel="icon" type="image/svg+xml" href="images/favicon.svg"/>
-        
+        <?staticSearchMeta?>
     </head>
     
     <body id="top">
@@ -19,12 +19,13 @@
             <!--<a href="#content" class="skip-link">Skip to content</a>
         <div id="mobile-nav-banner" data-state="closed">
             <a href="index.html">
-                <img width="40" height="32" class="site-logo-mobile" src="images/site-logo.svg" alt="The British Book Trade Index" />
-                The British Book Trade Index
+                <img width="40" height="32" class="site-logo-mobile" src="images/site-logo.svg" alt="Michigan Corpus of Academic Spoken English" />
+                Michigan Corpus of Academic Spoken English
             </a>
         </div>-->
             <div class="site-banner"><h1>Michigan Corpus of Academic Spoken English</h1></div>
-            <label id="lbl-mobile-menu" for="chk-mobile-menu"><svg width="2rem" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <label id="lbl-mobile-menu" for="chk-mobile-menu">
+                <svg width="2rem" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M20 7L4 7" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
                     <path d="M20 12L4 12" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
                     <path d="M20 17L4 17" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
@@ -39,13 +40,7 @@
                     <!--<li><a role="menuitem" href="tools.html">Tools</a></li>-->
                     <li><a role="menuitem" href="faq.html">FAQ</a></li>
                 </ul>
-                
-                <div class="mobile-nav-footer">
-                    <!--<img class="mobile-footer-logo" src="images/mobile-nav-footer-logo.webp" width="75" height="57" alt="BBTI site logo" />-->
-                </div>
-                
             </nav>
-            
         </header>
         <main>
             <!-- This processing-instruction will be replaced by the document content. -->
