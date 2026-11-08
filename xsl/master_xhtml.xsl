@@ -62,12 +62,18 @@
     <xsl:variable name="xmlSource" as="document-node()+" select="collection($baseDir || '/p5/?select=*.xml;recurse=yes')"/>
     
     <xd:doc>
+        <xd:desc>This is the source for content pages, which are written as XHTML article elements.</xd:desc>
+    </xd:doc>
+    <xsl:variable name="pageSource" as="document-node()+" select="collection($baseDir || '/pages/?select=*.xml;recurse=yes')"/>
+    
+    <xd:doc>
         <xd:desc>The root template calls each of the individual diagnostic processes.</xd:desc>
     </xd:doc>
     <xsl:template match="/">
         <xsl:message>Building site...</xsl:message>
         <xsl:message>$docsToBuild = {$docsToBuild}</xsl:message>
         
+        <!-- First the corpus content. -->
         <xsl:for-each select="$xmlSource[(TEI/@xml:id = $docsToBuildIds) or ($docsToBuild eq '')]">
             <xsl:variable name="currId" as="xs:string" select="xs:string(TEI/@xml:id)"/>
             <xsl:message>Processing document {$currId}</xsl:message>
@@ -79,6 +85,17 @@
             </xsl:result-document>
         </xsl:for-each>
         
+        <!-- Next, the site pages. -->
+        <xsl:for-each select="$pageSource[(xh:article/@id = $docsToBuildIds) or ($docsToBuild eq '')]">
+            <xsl:variable name="currId" as="xs:string" select="xs:string(xh:article/@id)"/>
+            <xsl:message>Processing document {$currId}</xsl:message>
+            <xsl:result-document href="{$baseDir}/site/{$currId}.html">
+                <xsl:apply-templates select="$pageTemplate/xh:html">
+                    <xsl:with-param name="currId" as="xs:string" select="$currId" tunnel="yes"/>
+                    <xsl:with-param name="currHtml" as="document-node()" select="." tunnel="yes"/>
+                </xsl:apply-templates>
+            </xsl:result-document>
+        </xsl:for-each>
         
     </xsl:template>
     
