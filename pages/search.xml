@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<article xmlns="http://www.w3.org/1999/xhtml" id="search">
+    <h2>Search the Michigan Corpus of Academic Spoken English</h2> 
+    
+    <?staticSearch?>
+    
+</article>
+
