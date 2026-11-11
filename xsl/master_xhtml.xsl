@@ -80,7 +80,8 @@
             <xsl:result-document href="{$baseDir}/site/{$currId}.html">
                 <xsl:apply-templates select="$pageTemplate/xh:html">
                     <xsl:with-param name="currId" as="xs:string" select="$currId" tunnel="yes"/>
-                    <xsl:with-param name="currP5" as="document-node()" select="." tunnel="yes"/>
+                    <xsl:with-param name="currP5" as="document-node()?" select="." tunnel="yes"/>
+                    <xsl:with-param name="currHtml" as="document-node()?" select="()" tunnel="yes"/>
                 </xsl:apply-templates>
             </xsl:result-document>
         </xsl:for-each>
@@ -92,13 +93,76 @@
             <xsl:result-document href="{$baseDir}/site/{$currId}.html">
                 <xsl:apply-templates select="$pageTemplate/xh:html">
                     <xsl:with-param name="currId" as="xs:string" select="$currId" tunnel="yes"/>
-                    <xsl:with-param name="currHtml" as="document-node()" select="." tunnel="yes"/>
+                    <xsl:with-param name="currP5" as="document-node()?" select="()" tunnel="yes"/>
+                    <xsl:with-param name="currHtml" as="document-node()?" select="." tunnel="yes"/>
                 </xsl:apply-templates>
             </xsl:result-document>
         </xsl:for-each>
         
     </xsl:template>
     
+    <xd:doc>
+        <xd:desc>We inject the source document id into the html root element.</xd:desc>
+        <xd:param name="currId" as="xs:string" tunnel="yes">The id of the root element of
+        the document-node being processed.</xd:param>
+    </xd:doc>
+    <xsl:template match="xh:html">
+        <xsl:param name="currId" as="xs:string" tunnel="yes"/>
+        <html>
+            <xsl:apply-templates select="@*"/>
+            <xsl:attribute name="id" select="$currId"/>
+            <xsl:apply-templates select="node()"/>
+        </html>
+    </xsl:template>
     
+    <xd:doc>
+        <xd:desc>Processing instruction for the page title.</xd:desc>
+        <xd:param name="currP5" as="document-node()?" tunnel="yes">This param contains the 
+        P5 source document being processed if there is one, otherwise the empty sequence.</xd:param>
+        <xd:param name="currHtml" as="document-node()?" tunnel="yes">This param contains the 
+            HTML source document (rooted on xh:article) being processed if there is one, otherwise the empty sequence.</xd:param>
+    </xd:doc>
+    <xsl:template match="processing-instruction('pageTitle')">
+        <xsl:param name="currP5" as="document-node()?" tunnel="yes"/>
+        <xsl:param name="currHtml" as="document-node()?" tunnel="yes"/>
+    </xsl:template>
+    
+    <xd:doc>
+        <xd:desc>Processing instruction for staticSearch filter meta tags.</xd:desc>
+        <xd:param name="currP5" as="document-node()?" tunnel="yes">This param contains the 
+            P5 source document being processed if there is one, otherwise the empty sequence.</xd:param>
+        <xd:param name="currHtml" as="document-node()?" tunnel="yes">This param contains the 
+            HTML source document (rooted on xh:article) being processed if there is one, otherwise the empty sequence.</xd:param>
+    </xd:doc>
+    <xsl:template match="processing-instruction('staticSearchMeta')">
+        <xsl:param name="currP5" as="document-node()?" tunnel="yes"/>
+        <xsl:param name="currHtml" as="document-node()?" tunnel="yes"/>
+    </xsl:template>
+    
+    <xd:doc>
+        <xd:desc>Processing instruction for the document content.</xd:desc>
+        <xd:param name="currP5" as="document-node()?" tunnel="yes">This param contains the 
+            P5 source document being processed if there is one, otherwise the empty sequence.</xd:param>
+        <xd:param name="currHtml" as="document-node()?" tunnel="yes">This param contains the 
+            HTML source document (rooted on xh:article) being processed if there is one, otherwise the empty sequence.</xd:param>
+    </xd:doc>
+    <xsl:template match="processing-instruction('docContent')">
+        <xsl:param name="currP5" as="document-node()?" tunnel="yes"/>
+        <xsl:param name="currHtml" as="document-node()?" tunnel="yes"/>
+        <xsl:choose>
+            <xsl:when test="$currHtml">
+                <xsl:apply-templates select="$currHtml/xh:article"/>
+            </xsl:when>
+            <xsl:otherwise>
+                
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    <xd:doc>
+        <xd:desc>We suppress the id in the xh:article element because 
+        we have promoted it to the html root element.</xd:desc>
+    </xd:doc>
+    <xsl:template match="xh:article/@id"/>
     
 </xsl:stylesheet>
