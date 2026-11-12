@@ -2,9 +2,22 @@
 <project>
     <meta>
         <filters directoryPatterns="" filePatterns="\QMICASE.xpr\E" positiveFilePatterns="" showHiddenFiles="false"/>
-        <options/>
+        <options>
+            <serialized xml:space="preserve">
+                <serializableOrderedMap>
+                    <entry>
+                        <String>enable.project.master.files.support</String>
+                        <Boolean>true</Boolean>
+                    </entry>
+                </serializableOrderedMap>
+            </serialized>
+        </options>
     </meta>
     <projectTree name="MICASE.xpr">
+        <folder masterFiles="true" name="Main Files">
+            <file name="xsl/master_p5.xsl"/>
+            <file name="xsl/master_xhtml.xsl"/>
+        </folder>
         <folder path="."/>
     </projectTree>
 </project>

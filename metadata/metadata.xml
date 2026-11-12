@@ -76,7 +76,7 @@
             </taxonomy>
             
             <taxonomy xml:id="taxAcDiv">
-               <desc>Academic Division</desc>
+               <gloss>Academic Division</gloss>
                <category n="BS" xml:id="catAcDiv_BS"><gloss>Biological and Health Sciences</gloss></category>
                <category n="HA" xml:id="catAcDiv_HA"><gloss>Humanities and Arts</gloss></category>
                <category n="NA" xml:id="catAcDiv_NA"><gloss>Not Applicable/Other</gloss></category>
@@ -85,7 +85,7 @@
             </taxonomy>
             
             <taxonomy xml:id="taxAcDisc">
-               <desc>Academic Discipline</desc>
+               <gloss>Academic Discipline</gloss>
                <category n="095" xml:id="catAcDisc_095"><gloss>Afroamerican and African Studies</gloss></category>
                <category n="105" xml:id="catAcDisc_105"><gloss>American Culture</gloss></category>
                <category n="115" xml:id="catAcDisc_115"><gloss>Anthropology</gloss></category>
@@ -138,7 +138,7 @@
             </taxonomy>
             
             <taxonomy xml:id="taxPartLevel">
-               <desc>Participant Level</desc>
+               <gloss>Participant Level</gloss>
                <category n="JF" xml:id="catPartLevel_JF"><gloss>Junior Faculty</gloss></category>
                <category n="JG" xml:id="catPartLevel_JG"><gloss>Junior Graduate Students</gloss></category>
                <category n="JU" xml:id="catPartLevel_JU"><gloss>Junior Undergraduates</gloss></category>
@@ -154,7 +154,7 @@
             </taxonomy>
             
             <taxonomy xml:id="taxInteractivity">
-               <desc>Interactivity Rating</desc>
+               <gloss>Interactivity Rating</gloss>
                <category n="HI" xml:id="catInteractivity_HI"><gloss>Highly interactive</gloss></category>
                <category n="HM" xml:id="catInteractivity_HM"><gloss>Highly monologic</gloss></category>
                <category n="MI" xml:id="catInteractivity_MI"><gloss>Mostly interactive</gloss></category>
@@ -163,7 +163,7 @@
             </taxonomy>
             
             <taxonomy xml:id="taxAgeRange">
-               <desc>Age Range</desc>
+               <gloss>Age Range</gloss>
                <category n="0" xml:id="catAgeRange_0"><gloss>Unknown</gloss></category>
                <category n="1" xml:id="catAgeRange_1"><gloss>17-23</gloss></category>
                <category n="2" xml:id="catAgeRange_2"><gloss>24-30</gloss></category>
@@ -172,7 +172,7 @@
             </taxonomy>
             
             <taxonomy xml:id="taxSpeechEventType">
-               <desc>Speech Event Type</desc>
+               <gloss>Speech Event Type</gloss>
                <category n="ADV" xml:id="catSpeechEventType_ADV"><gloss>Advising Session</gloss></category>
                <category n="COL" xml:id="catSpeechEventType_COL"><gloss>Colloquium</gloss></category>
                <category n="DEF" xml:id="catSpeechEventType_DEF"><gloss>Dissertation Defense</gloss></category>
@@ -191,7 +191,7 @@
             </taxonomy>
             
             <taxonomy xml:id="taxLangEquivs">
-               <desc>Mapping of original to BCP-47-compliant language codes.</desc>
+               <gloss>Mapping of original to BCP-47-compliant language codes.</gloss>
                <!-- Initially in comment form. -->
                <!-- 
                   HIN = Hindi = hi ?

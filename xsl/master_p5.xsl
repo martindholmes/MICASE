@@ -20,6 +20,10 @@
         </xd:desc>
     </xd:doc>
     
+    <xd:doc>
+        <xd:desc>Include the globals file.</xd:desc>
+    </xd:doc>
+    <xsl:include href="module_globals.xsl"/>
     
     <xd:doc>
         <xd:desc>We're producing XHTML5.</xd:desc>
@@ -31,53 +35,6 @@
         <xd:desc>For now, we output what we see unless there's a template for it.</xd:desc>
     </xd:doc>
     <xsl:mode on-no-match="shallow-copy"/>
-    
-    <xd:doc>
-        <xd:desc>For clarity, we use a projDir from the Ant build file.</xd:desc>
-    </xd:doc>
-    <xsl:param name="projDir" as="xs:string" select="'..'"/>
-    
-    <xd:doc>
-        <xd:desc>The metadata taxonomies.</xd:desc>
-    </xd:doc>
-    <xsl:variable name="taxonomies" as="element(tei:taxonomy)+">
-        <xsl:sequence select="doc($projDir || '/metadata/metadata.xml')//tei:taxonomy"/>
-    </xsl:variable>
-    
-    <xd:doc>
-        <xd:desc>A map of all the metadata keys to their categories.</xd:desc>
-    </xd:doc>
-    <xsl:variable name="mapMetaKeysToCategories" as="map(xs:string, element(tei:category))">
-        <xsl:map>
-            <xsl:for-each select="$taxonomies">
-                <xsl:variable name="taxId" as="xs:string" select="xs:string(@xml:id)"/>
-                <xsl:for-each select="descendant::category">
-                    <xsl:map-entry key="concat($taxId, '_', xs:string(@n))" select="."/>
-                </xsl:for-each>
-            </xsl:for-each>
-        </xsl:map>
-    </xsl:variable>
-    
-    <xd:doc>
-        <xd:desc>Set this param to limit the build to a single file.</xd:desc>
-    </xd:doc>
-    <xsl:param name="docsToBuild" as="xs:string" select="''"/>
-    
-    <xd:doc>
-        <xd:desc>Split those docsToBuild...</xd:desc>
-    </xd:doc>
-    <xsl:variable name="docsToBuildIds" as="xs:string*" select="tokenize($docsToBuild, '\s*,\s*')"/>
-    
-    <xd:doc scope="component">
-        <xd:desc><xd:ref name="docRoot">docRoot</xd:ref> is needed in various contexts where the input
-            document is out of scope.</xd:desc>
-    </xd:doc>
-    <xsl:variable name="docRoot" select="/"/>
-    
-    <xd:doc>
-        <xd:desc>This is the source XML.</xd:desc>
-    </xd:doc>
-    <xsl:variable name="xmlSource" as="document-node()+" select="collection($projDir || '/data/?select=*.xml;recurse=yes')"/>
     
     <xd:doc>
         <xd:desc>The root template calls each of the individual diagnostic processes.</xd:desc>
@@ -244,15 +201,15 @@
             <xsl:variable name="academicDiscipline" as="xs:string" select="$idBits[2]"/>
             <xsl:variable name="participantLevel" as="xs:string" select="upper-case($idBits[3])"/>
             <textClass>
-                <catRef scheme="taxSpeechEventType" target="{'cat:catSpeechEventType_' || $speechEventType}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catSpeechEventType_' || $speechEventType]/tei:gloss)}"/>
-                <catRef scheme="taxAcDisc" target="{'cat:catAcDisc_' || $academicDiscipline}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catAcDisc_' || $academicDiscipline]/tei:gloss)}"/>
-                <catRef scheme="taxPartLevel" target="{'cat:catPartLevel_' || $participantLevel}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catPartLevel_' || $participantLevel]/tei:gloss)}"/>
+                <catRef scheme="tax:taxSpeechEventType" target="{'cat:catSpeechEventType_' || $speechEventType}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catSpeechEventType_' || $speechEventType]/tei:gloss)}"/>
+                <catRef scheme="tax:taxAcDisc" target="{'cat:catAcDisc_' || $academicDiscipline}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catAcDisc_' || $academicDiscipline]/tei:gloss)}"/>
+                <catRef scheme="tax:taxPartLevel" target="{'cat:catPartLevel_' || $participantLevel}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catPartLevel_' || $participantLevel]/tei:gloss)}"/>
                 
                 <!-- We discern the academic division from an abbreviation in the title element. -->
                 <xsl:variable name="acDiv" as="xs:string?" select="replace(normalize-space(//TITLE[contains(., 'Rackham')]), '^.*Rackham\s*Div:\s*([A-Z]+)[^A-Z]*$', '$1')"/>
                 <xsl:choose>
                     <xsl:when test="$acDiv = ('BS', 'HA', 'NA', 'PS', 'SS')">
-                        <catRef scheme="taxAcDiv" target="cat:catAcDiv_{$acDiv}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catAcDiv_' || $acDiv]/tei:gloss)}"/>
+                        <catRef scheme="tax:taxAcDiv" target="cat:catAcDiv_{$acDiv}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catAcDiv_' || $acDiv]/tei:gloss)}"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:message terminate="yes" select="'Unable to find academic division corresponding to Rackham Div: ' || $acDiv"/>
@@ -263,7 +220,7 @@
                 <xsl:variable name="interacRating" as="xs:string?" select="replace(normalize-space(//LANGUSAGE/P[contains(., 'Interactivity Rating')]), '^.*Interactivity Rating:\s*([A-Z]+)[^A-Z]*$', '$1')"/>
                 <xsl:choose>
                     <xsl:when test="$interacRating = ('HI', 'HM', 'MI', 'MM', 'MX')">
-                        <catRef scheme="taxInteractivity" target="cat:catInteractivity_{$interacRating}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catInteractivity_' || $interacRating]/tei:gloss)}"/>
+                        <catRef scheme="tax:taxInteractivity" target="cat:catInteractivity_{$interacRating}" n="{xs:string($taxonomies//tei:category[@xml:id eq 'catInteractivity_' || $interacRating]/tei:gloss)}"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:message terminate="yes" select="'Unable to find Interactivity Rating corresponding to Interactivity Rating: ' || $acDiv"/>

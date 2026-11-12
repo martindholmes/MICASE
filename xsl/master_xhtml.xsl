@@ -8,6 +8,7 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xh="http://www.w3.org/1999/xhtml"
     xmlns:hcmc="http://hcmc.uvic.ca/ns"
+    xmlns:map="http://www.w3.org/2005/xpath-functions/map"
     expand-text="yes"
     version="3.0">
     <xd:doc scope="stylesheet">
@@ -19,6 +20,13 @@
     </xd:doc>
     
     
+    
+    <xd:doc>
+        <xd:desc>Include the globals file.</xd:desc>
+    </xd:doc>
+    <xsl:include href="module_globals.xsl"/>
+    
+    
     <xd:doc>
         <xd:desc>We're producing XHTML5.</xd:desc>
     </xd:doc>
@@ -26,45 +34,10 @@
         normalization-form="NFC" indent="yes" exclude-result-prefixes="#all" include-content-type="no"/>
     
     <xd:doc>
-        <xd:desc>For clarity, we use a basedir from the Ant build file.</xd:desc>
-    </xd:doc>
-    <xsl:param name="baseDir" as="xs:string" select="'..'"/>
-    
-    <xd:doc>
-        <xd:desc>Set this param to limit the build to a single file.</xd:desc>
-    </xd:doc>
-    <xsl:param name="docsToBuild" as="xs:string" select="''"/>
-    
-    <xd:doc>
-        <xd:desc>Split those docsToBuild...</xd:desc>
-    </xd:doc>
-    <xsl:variable name="docsToBuildIds" as="xs:string*" select="tokenize($docsToBuild, '\s*,\s*')"/>
-    
-    <xd:doc>
-        <xd:desc><xd:ref name="docRoot">docRoot</xd:ref> is needed in various contexts where the input
-            document is out of scope.</xd:desc>
-    </xd:doc>
-    <xsl:variable name="docRoot" select="/"/>
-    
-    <xd:doc>
         <xd:desc>For the page template we process, the mode is basically an identity transform.</xd:desc>
     </xd:doc>
     <xsl:mode on-no-match="shallow-copy"/>
-    
-    <xd:doc>
-        <xd:desc>This is the page template that will be used for all the pages.</xd:desc>
-    </xd:doc>
-    <xsl:variable name="pageTemplate" as="document-node()" select="doc($baseDir || '/templates/pageTemplate.xml')"/>
-    
-    <xd:doc>
-        <xd:desc>This is the source XML: P5 generated from the original TEI.2 data.</xd:desc>
-    </xd:doc>
-    <xsl:variable name="xmlSource" as="document-node()+" select="collection($baseDir || '/p5/?select=*.xml;recurse=yes')"/>
-    
-    <xd:doc>
-        <xd:desc>This is the source for content pages, which are written as XHTML article elements.</xd:desc>
-    </xd:doc>
-    <xsl:variable name="pageSource" as="document-node()+" select="collection($baseDir || '/pages/?select=*.xml;recurse=yes')"/>
+
     
     <xd:doc>
         <xd:desc>The root template calls each of the individual diagnostic processes.</xd:desc>
@@ -74,10 +47,10 @@
         <xsl:message>$docsToBuild = {$docsToBuild}</xsl:message>
         
         <!-- First the corpus content. -->
-        <xsl:for-each select="$xmlSource[(TEI/@xml:id = $docsToBuildIds) or ($docsToBuild eq '')]">
+        <xsl:for-each select="$p5Source[(TEI/@xml:id = $docsToBuildIds) or ($docsToBuild eq '')]">
             <xsl:variable name="currId" as="xs:string" select="xs:string(TEI/@xml:id)"/>
             <xsl:message>Processing document {$currId}</xsl:message>
-            <xsl:result-document href="{$baseDir}/site/{$currId}.html">
+            <xsl:result-document href="{$projDir}/site/{$currId}.html">
                 <xsl:apply-templates select="$pageTemplate/xh:html">
                     <xsl:with-param name="currId" as="xs:string" select="$currId" tunnel="yes"/>
                     <xsl:with-param name="currP5" as="document-node()?" select="." tunnel="yes"/>
@@ -90,7 +63,7 @@
         <xsl:for-each select="$pageSource[(xh:article/@id = $docsToBuildIds) or ($docsToBuild eq '')]">
             <xsl:variable name="currId" as="xs:string" select="xs:string(xh:article/@id)"/>
             <xsl:message>Processing document {$currId}</xsl:message>
-            <xsl:result-document href="{$baseDir}/site/{$currId}.html">
+            <xsl:result-document href="{$projDir}/site/{$currId}.html">
                 <xsl:apply-templates select="$pageTemplate/xh:html">
                     <xsl:with-param name="currId" as="xs:string" select="$currId" tunnel="yes"/>
                     <xsl:with-param name="currP5" as="document-node()?" select="()" tunnel="yes"/>
@@ -125,6 +98,14 @@
     <xsl:template match="processing-instruction('pageTitle')">
         <xsl:param name="currP5" as="document-node()?" tunnel="yes"/>
         <xsl:param name="currHtml" as="document-node()?" tunnel="yes"/>
+        <xsl:choose>
+            <xsl:when test="$currHtml">
+                <xsl:value-of select="$currHtml/xh:article/xh:h2"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="string-join(($currP5//titleStmt/title), ' | ')"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xd:doc>
@@ -137,6 +118,19 @@
     <xsl:template match="processing-instruction('staticSearchMeta')">
         <xsl:param name="currP5" as="document-node()?" tunnel="yes"/>
         <xsl:param name="currHtml" as="document-node()?" tunnel="yes"/>
+        <xsl:choose>
+            <xsl:when test="$currHtml">
+                <meta name="Document Type" class="staticSearch_desc" content="Site information page"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <meta name="Document Type" class="staticSearch_desc" content="Corpus transcript"/>
+                <xsl:for-each select="$currP5//catRef">
+                    <meta name="{map:get($mapTaxPtrToDesc, xs:string(@scheme))}" class="staticSearch_desc" content="xs:string(@n)"/>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+        
+        
     </xsl:template>
     
     <xd:doc>
@@ -164,5 +158,6 @@
         we have promoted it to the html root element.</xd:desc>
     </xd:doc>
     <xsl:template match="xh:article/@id"/>
+    
     
 </xsl:stylesheet>
