@@ -124,8 +124,9 @@
             </xsl:when>
             <xsl:otherwise>
                 <meta name="Document Type" class="staticSearch_desc" content="Corpus transcript"/>
-                <xsl:for-each select="$currP5//catRef">
-                    <meta name="{map:get($mapTaxPtrToDesc, xs:string(@scheme))}" class="staticSearch_desc" content="xs:string(@n)"/>
+                <xsl:for-each select="$currP5/descendant::catRef">
+                    <xsl:comment>{@scheme}</xsl:comment>
+                    <meta name="{map:get($mapTaxPtrToDesc, xs:string(@scheme))}" class="staticSearch_desc" content="{xs:string(@n)}"/>
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>

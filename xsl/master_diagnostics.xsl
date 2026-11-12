@@ -21,6 +21,7 @@
         </xd:desc>
     </xd:doc>
     
+    <xsl:include href="module_globals.xsl"/>
     
     <xd:doc>
         <xd:desc>We're producing XHTML5.</xd:desc>
@@ -35,39 +36,20 @@
     <xsl:mode name="descToText" on-no-match="shallow-skip"/>
     
     <xd:doc>
-        <xd:desc>For clarity, we use a basedir from the Ant build file.</xd:desc>
-    </xd:doc>
-    <xsl:param name="baseDir" as="xs:string" select="'..'"/>
-    
-    <xd:doc>
         <xd:desc>Set this param to limit the run to a single diagnostic.</xd:desc>
     </xd:doc>
     <xsl:param name="runOnly" as="xs:string" select="''"/>
-    
-    <xd:doc scope="component">
-        <xd:desc><xd:ref name="docRoot">docRoot</xd:ref> is needed in various contexts where the input
-            document is out of scope.</xd:desc>
-    </xd:doc>
-    <xsl:variable name="docRoot" select="/"/>
-    
-    <xd:doc>
-        <xd:desc>This is the source XML.</xd:desc>
-    </xd:doc>
-    <xsl:variable name="xmlSource" as="document-node()+" select="collection($baseDir || '/data/?select=*.xml;recurse=yes')"/>
-    
-    <xd:doc>
-        <xd:desc>This is the generated P5 XML.</xd:desc>
-    </xd:doc>
-    <xsl:variable name="xmlP5" as="document-node()+" select="collection($baseDir || '/p5/?select=*.xml;recurse=yes')"/>
     
     <xd:doc>
         <xd:desc>The root template calls each of the individual diagnostic processes.</xd:desc>
     </xd:doc>
     <xsl:template match="/">
         <xsl:message>Running diagnostics...</xsl:message>
-        <xsl:message>$runOnly = {$runOnly}</xsl:message>
+        <xsl:if test="$runOnly">
+            <xsl:message>$runOnly = {$runOnly}</xsl:message>
+        </xsl:if>
         
-        <xsl:result-document href="{$baseDir}/site/diagnostics.html">
+        <xsl:result-document href="{$projDir}/site/diagnostics.html">
             <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" id="diagnostics">
                 <head>
                     <title>MICASE Project Diagnostics</title>
@@ -103,17 +85,17 @@
         <xsl:for-each select="$xmlSource//TEI.2">
             <xsl:sort select="@ID"/>
             <xsl:variable name="id" select="@ID"/>
-            <xsl:variable name="p5" as="element(tei:TEI)" select="$xmlP5//tei:TEI[@xml:id eq $id]"/>
+            <xsl:variable name="p5" as="element(tei:TEI)" select="$p5Source//tei:TEI[@xml:id eq $id]"/>
             <xsl:variable name="sourceAsText" as="xs:string*">
                 <xsl:apply-templates select="//TEXT" mode="descToText"/>
             </xsl:variable>
             <xsl:variable name="lenSource" as="xs:integer" select="string-length(normalize-space(string-join($sourceAsText, '')))"/>
             <xsl:variable name="lenP5" as="xs:integer" select="string-length(normalize-space($p5/tei:text))"/>
             <xsl:if test="not($lenSource eq $lenP5)">
-                <xsl:result-document href="{$baseDir}/diffs/{$id}_orig.txt" method="text">
+                <xsl:result-document href="{$projDir}/diffs/{$id}_orig.txt" method="text">
                     <xsl:sequence select="string-join(tokenize(normalize-space(string-join($sourceAsText, '')), '\.'), '.&#x0a;')"/>
                 </xsl:result-document>
-                <xsl:result-document href="{$baseDir}/diffs/{$id}_p5.txt" method="text">
+                <xsl:result-document href="{$projDir}/diffs/{$id}_p5.txt" method="text">
                     <xsl:sequence select="string-join(tokenize(normalize-space($p5/tei:text), '\.'), '.&#x0a;')"/>
                 </xsl:result-document>
             </xsl:if>
@@ -201,7 +183,7 @@
                     <xsl:for-each select="$xmlSource//TEI.2">
                         <xsl:sort select="@ID"/>
                         <xsl:variable name="id" select="@ID"/>
-                        <xsl:variable name="p5" as="element(tei:TEI)" select="$xmlP5//tei:TEI[@xml:id eq $id]"/>
+                        <xsl:variable name="p5" as="element(tei:TEI)" select="$p5Source//tei:TEI[@xml:id eq $id]"/>
                         <xsl:variable name="sourceAsText" as="xs:string*">
                             <xsl:apply-templates select="//TEXT" mode="descToText"/>
                         </xsl:variable>
@@ -241,7 +223,7 @@
                     <xsl:for-each select="$xmlSource//TEI.2">
                         <xsl:sort select="@ID"/>
                         <xsl:variable name="id" select="@ID"/>
-                        <xsl:variable name="p5" as="element(tei:TEI)" select="$xmlP5//tei:TEI[@xml:id eq $id]"/>
+                        <xsl:variable name="p5" as="element(tei:TEI)" select="$p5Source//tei:TEI[@xml:id eq $id]"/>
                         <!-- First we create a map of all qualifying text nodes to their speakers. -->
                         <xsl:variable name="mapTextNodesToSpeakers" as="map(xs:string, xs:string)">
                             <xsl:map>
