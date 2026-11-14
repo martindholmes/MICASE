@@ -1,0 +1,27 @@
+List of search/browse filters to be implemented:
+
+Speech Event Type
+
+Academic Division
+
+Academic Discipline
+
+Participant Level
+
+Interactivity Rating
+
+Speaker Attributes:
+    Gender (All, Female, Male, Unknown)
+    
+    Age (All, Unknown, 17-23, 24-40, 31-50, 51 & over)
+    
+    Academic Position/Role (All, Junior Faculty, Junior Graduate Student, Junior Undergraduate, Post-doctoral Fellow, Researcher, Secior Faculty, Senior Graduate Student, Staff, Senior Undergraduate, Unknown, Visitor/Other
+    
+    Native Speaker Status (All, Non-native speaker, Near-native speaker, Native speaker American English, Native speaker Other English, Unknown
+    
+    First Language (list...)
+    
+    
+For search and browse, these are non-exclusive; in other words, if you search for near-native-speaker, you'll get all discussions which involve a near-native-speaker.
+    
+    
