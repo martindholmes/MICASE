@@ -67,6 +67,16 @@
         </xsl:map>
     </xsl:variable>
     
+    <xd:doc>
+        <xd:desc>Map of @sex values to their gender descriptors.</xd:desc>
+    </xd:doc>
+    <xsl:variable name="mapGendersToStrings" as="map(xs:string, xs:string)">
+        <xsl:map>
+            <xsl:map-entry key="'U'" select="'Unknown'"/>
+            <xsl:map-entry key="'F'" select="'Female'"/>
+            <xsl:map-entry key="'M'" select="'Male'"/>
+        </xsl:map>
+    </xsl:variable>
     
     <xd:doc>
         <xd:desc>Set this param to limit the build to a single file.</xd:desc>

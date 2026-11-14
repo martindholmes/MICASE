@@ -1,17 +1,17 @@
 List of search/browse filters to be implemented:
 
-Speech Event Type
+Speech Event Type DONE
 
-Academic Division
+Academic Division DONE
 
-Academic Discipline
+Academic Discipline DONE
 
-Participant Level
+Participant Level DONE
 
-Interactivity Rating
+Interactivity Rating DONE
 
 Speaker Attributes:
-    Gender (All, Female, Male, Unknown)
+    Gender (All, Female, Male, Unknown) DONE
     
     Age (All, Unknown, 17-23, 24-40, 31-50, 51 & over)
     
@@ -22,6 +22,6 @@ Speaker Attributes:
     First Language (list...)
     
     
-For search and browse, these are non-exclusive; in other words, if you search for near-native-speaker, you'll get all discussions which involve a near-native-speaker.
+For search and browse, these are non-exclusive; in other words, if you search for near-native-speaker, you'll get all discussions which involve a near-native-speaker. All of these must be staticSearch meta tags. The original site has a slightly different set or organization of these for the browse and search pages, but I see no reason for the difference, so we should simply have a single search/browse page which allows use of all the filters with or without a search string.
     
-    
+We also add Document Type so that you can search info pages, but transcripts would be selected by default.

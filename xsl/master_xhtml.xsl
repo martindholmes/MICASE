@@ -128,6 +128,9 @@
                     <xsl:comment>{@scheme}</xsl:comment>
                     <meta name="{map:get($mapTaxPtrToDesc, xs:string(@scheme))}" class="staticSearch_desc" content="{xs:string(@n)}"/>
                 </xsl:for-each>
+                <xsl:for-each select="distinct-values(($currP5//person/@sex))">
+                    <meta name="'Speaker Gender'" class="staticSearch_desc" content="{map:get($mapGendersToStrings, .)}"/>
+                </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
         
