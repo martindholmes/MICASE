@@ -13,7 +13,7 @@ Interactivity Rating DONE
 Speaker Attributes:
     Gender (All, Female, Male, Unknown) DONE
     
-    Age (All, Unknown, 17-23, 24-40, 31-50, 51 & over)
+    Age (All, Unknown, 17-23, 24-40, 31-50, 51 & over) DONE
     
     Academic Position/Role (All, Junior Faculty, Junior Graduate Student, Junior Undergraduate, Post-doctoral Fellow, Researcher, Secior Faculty, Senior Graduate Student, Staff, Senior Undergraduate, Unknown, Visitor/Other
     

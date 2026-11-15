@@ -131,6 +131,9 @@
                 <xsl:for-each select="distinct-values(($currP5//person/@sex))">
                     <meta name="'Speaker Gender'" class="staticSearch_desc" content="{map:get($mapGendersToStrings, .)}"/>
                 </xsl:for-each>
+                <xsl:for-each select="distinct-values(($currP5//person/@age))">
+                    <meta name="'Speaker Age'" class="staticSearch_desc" content="{map:get($mapAgesToStrings, .)}"/>
+                </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
         

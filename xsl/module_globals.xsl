@@ -79,6 +79,17 @@
     </xsl:variable>
     
     <xd:doc>
+        <xd:desc>Map of @age values to their range descriptors.</xd:desc>
+    </xd:doc>
+    <xsl:variable name="mapAgesToStrings" as="map(xs:string, xs:string)">
+        <xsl:map>
+            <xsl:for-each select="$taxonomies[@xml:id='taxAgeRange']/tei:category">
+                <xsl:map-entry key="xs:string(@n)" select="xs:string(child::tei:gloss)"/>
+            </xsl:for-each>
+        </xsl:map>
+    </xsl:variable>
+    
+    <xd:doc>
         <xd:desc>Set this param to limit the build to a single file.</xd:desc>
     </xd:doc>
     <xsl:param name="docsToBuild" as="xs:string" select="''"/>
