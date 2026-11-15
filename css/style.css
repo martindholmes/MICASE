@@ -1,0 +1,28 @@
+/* Stylesheet for the static MICASE site.
+   Created 2026 by Martin Holmes.         */
+
+div.utterance{
+    margin-left: 2em;
+    text-indent: -2em;
+    span.speaker{
+        font-weight: bold;
+        padding-right: 1em;
+    }
+}
+
+*[data-trans="overlap"], *[data-type="overlap"]{
+        margin-left: 6em;
+}
+
+span[date-el="foreign"]{
+    font-style: italic;
+}
+span[data-el="incident"]{
+    background-color: light-gray;
+    &::before{
+        content: "[";
+    }
+    &::after{
+        content: "]";
+    }
+}
