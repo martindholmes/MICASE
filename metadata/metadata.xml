@@ -190,19 +190,57 @@
                <category n="TOU" xml:id="catSpeechEventType_TOU"><gloss>Tour</gloss></category>
             </taxonomy>
             
-            <taxonomy xml:id="taxLangEquivs">
-               <gloss>Mapping of original to BCP-47-compliant language codes.</gloss>
-               <!-- Initially in comment form. -->
-               <!-- 
-                  HIN = Hindi = hi ?
-                  EST = Estonian = et ?
-                  
-                  NS = native speaker of English
-                  NNS = non-native speaker of English
-                  NRN = near-native speaker of English
-                  NSO = native speaker of Other English ??? (what is that?)
-                  SS =  ???
-               -->
+            <taxonomy xml:id="taxNativeSpeakerStatus">
+               <gloss>Native Speaker Status</gloss>
+               <category n="NS" xml:id="catLangEquivs_NS"><gloss>Native Speaker of US English</gloss></category>
+               <category n="NNS" xml:id="catLangEquivs_NNS"><gloss>Non-native Speaker of US English</gloss></category>
+               <category n="NRN" xml:id="catLangEquivs_NRN"><gloss>Near-native Speaker of US English</gloss></category>
+               <category n="NSO" xml:id="catLangEquivs_NSO"><gloss>Native Speaker of Other English</gloss></category>
+               <category n="UN" xml:id="catLangEquivs_UN"><gloss>Unknown</gloss></category>
+            </taxonomy>
+            
+            <taxonomy xml:id="taxFirstLanguages">
+               <!-- NOTE: These should be assigned proper IANA subtag codes. -->
+               <gloss>Non-English Languages</gloss>
+               <category n="ARA" xml:id="catFirstLanguages_ARA"><gloss>Arabic</gloss></category>
+               <category n="ARM" xml:id="catFirstLanguages_ARM"><gloss>Armenian</gloss></category>
+               <category n="CAN" xml:id="catFirstLanguages_CAN"><gloss>Cantonese</gloss></category>
+               <category n="CHI" xml:id="catFirstLanguages_CHI"><gloss>Mandarin</gloss></category>
+               <category n="CZE" xml:id="catFirstLanguages_CZE"><gloss>Czech</gloss></category>
+               <category n="DUT" xml:id="catFirstLanguages_DUT"><gloss>Dutch</gloss></category>
+               <category n="EST" xml:id="catFirstLanguages_EST"><gloss>Estonian</gloss></category>
+               <category n="FAR" xml:id="catFirstLanguages_FAR"><gloss>Farsi</gloss></category>
+               <category n="FRE" xml:id="catFirstLanguages_FRE"><gloss>French</gloss></category>
+               <category n="GER" xml:id="catFirstLanguages_GER"><gloss>German</gloss></category>
+               <category n="GUJ" xml:id="catFirstLanguages_GUJ"><gloss>Gujarati</gloss></category>
+               <category n="HEB" xml:id="catFirstLanguages_HEB"><gloss>Hebrew</gloss></category>
+               <category n="HIN" xml:id="catFirstLanguages_HIN"><gloss>Hindi</gloss></category>
+               <category n="HUN" xml:id="catFirstLanguages_HUN"><gloss>Hungarian</gloss></category>
+               <category n="IBO" xml:id="catFirstLanguages_IBO"><gloss>Ibo</gloss></category>
+               <category n="IND" xml:id="catFirstLanguages_IND"><gloss>Indonesian</gloss></category>
+               <category n="ITA" xml:id="catFirstLanguages_ITA"><gloss>Italian</gloss></category>
+               <category n="JAP" xml:id="catFirstLanguages_JAP"><gloss>Japanese</gloss></category>
+               <category n="KAN" xml:id="catFirstLanguages_KAN"><gloss>Kannada</gloss></category>
+               <category n="KOR" xml:id="catFirstLanguages_KOR"><gloss>Korean</gloss></category>
+               <category n="MAC" xml:id="catFirstLanguages_MAC"><gloss>Macedonian</gloss></category>
+               <category n="MAR" xml:id="catFirstLanguages_MAR"><gloss>Marathi</gloss></category>
+               <category n="POL" xml:id="catFirstLanguages_POL"><gloss>Polish</gloss></category>
+               <category n="POR" xml:id="catFirstLanguages_POR"><gloss>Portuguese</gloss></category>
+               <category n="RUS" xml:id="catFirstLanguages_RUS"><gloss>Russian</gloss></category>
+               <category n="SAE" xml:id="catFirstLanguages_SAE"><gloss>South African English</gloss></category>
+               <category n="SLO" xml:id="catFirstLanguages_SLO"><gloss>Slovak</gloss></category>
+               <category n="SPA" xml:id="catFirstLanguages_SPA"><gloss>Spanish</gloss></category>
+               <category n="SWA" xml:id="catFirstLanguages_SWA"><gloss>Swahili</gloss></category>
+               <category n="SWE" xml:id="catFirstLanguages_SWE"><gloss>Swedish</gloss></category>
+               <category n="TAG" xml:id="catFirstLanguages_TAG"><gloss>Tagalog</gloss></category>
+               <category n="TEL" xml:id="catFirstLanguages_TEL"><gloss>Telegu</gloss></category>
+               <category n="THA" xml:id="catFirstLanguages_THA"><gloss>Thai</gloss></category>
+               <category n="TUR" xml:id="catFirstLanguages_TUR"><gloss>Turkish</gloss></category>
+               <category n="UKE" xml:id="catFirstLanguages_UKE"><gloss>British English</gloss></category>
+               <category n="UKR" xml:id="catFirstLanguages_UKR"><gloss>Ukrainian</gloss></category>
+               <category n="UNK" xml:id="catFirstLanguages_UNK"><gloss>Unknown</gloss></category>
+               <category n="URD" xml:id="catFirstLanguages_URD"><gloss>Urdu</gloss></category>
+               <category n="VIE" xml:id="catFirstLanguages_VIE"><gloss>Vietnamese</gloss></category>
             </taxonomy>
             
          </classDecl>

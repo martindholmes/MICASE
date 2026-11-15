@@ -129,10 +129,19 @@
                     <meta name="{map:get($mapTaxPtrToDesc, xs:string(@scheme))}" class="staticSearch_desc" content="{xs:string(@n)}"/>
                 </xsl:for-each>
                 <xsl:for-each select="distinct-values(($currP5//person/@sex))">
-                    <meta name="'Speaker Gender'" class="staticSearch_desc" content="{map:get($mapGendersToStrings, .)}"/>
+                    <meta name="Speaker Gender" class="staticSearch_desc" content="{map:get($mapGendersToStrings, .)}"/>
                 </xsl:for-each>
                 <xsl:for-each select="distinct-values(($currP5//person/@age))">
-                    <meta name="'Speaker Age'" class="staticSearch_desc" content="{map:get($mapAgesToStrings, .)}"/>
+                    <meta name="Speaker Age" class="staticSearch_desc" content="{map:get($mapAgesToStrings, .)}"/>
+                </xsl:for-each>
+                <xsl:for-each select="distinct-values(($currP5//person/substring-before(@role, ',')))">
+                    <meta name="Academic Position/Role" class="staticSearch_desc" content="{map:get($mapAcPosToStrings, .)}"/>
+                </xsl:for-each>
+                <xsl:for-each select="distinct-values(($currP5//person/langKnowledge[normalize-space(.) = map:keys($mapNSStatusToStrings)]))">
+                    <meta name="Native Speaker Status" class="staticSearch_desc" content="{map:get($mapNSStatusToStrings, normalize-space(.))}"/>
+                </xsl:for-each>
+                <xsl:for-each select="distinct-values(($currP5//person/langKnowledge[normalize-space(.) = map:keys($mapFirstLanguagesToStrings)]))">
+                    <meta name="First Language" class="staticSearch_desc" content="{map:get($mapFirstLanguagesToStrings, normalize-space(.))}"/>
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>

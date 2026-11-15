@@ -90,6 +90,39 @@
     </xsl:variable>
     
     <xd:doc>
+        <xd:desc>Map of @role values to their range descriptors.</xd:desc>
+    </xd:doc>
+    <xsl:variable name="mapAcPosToStrings" as="map(xs:string, xs:string)">
+        <xsl:map>
+            <xsl:for-each select="$taxonomies[@xml:id='taxAcPos']/tei:category">
+                <xsl:map-entry key="xs:string(@n)" select="xs:string(child::tei:gloss)"/>
+            </xsl:for-each>
+        </xsl:map>
+    </xsl:variable>
+    
+    <xd:doc>
+        <xd:desc>Map of native speaker status values to their descriptors.</xd:desc>
+    </xd:doc>
+    <xsl:variable name="mapNSStatusToStrings" as="map(xs:string, xs:string)">
+        <xsl:map>
+            <xsl:for-each select="$taxonomies[@xml:id='taxNativeSpeakerStatus']/tei:category">
+                <xsl:map-entry key="xs:string(@n)" select="xs:string(child::tei:gloss)"/>
+            </xsl:for-each>
+        </xsl:map>
+    </xsl:variable>
+    
+    <xd:doc>
+        <xd:desc>Map of first language codes to their descriptors.</xd:desc>
+    </xd:doc>
+    <xsl:variable name="mapFirstLanguagesToStrings" as="map(xs:string, xs:string)">
+        <xsl:map>
+            <xsl:for-each select="$taxonomies[@xml:id='taxFirstLanguages']/tei:category">
+                <xsl:map-entry key="xs:string(@n)" select="xs:string(child::tei:gloss)"/>
+            </xsl:for-each>
+        </xsl:map>
+    </xsl:variable>
+    
+    <xd:doc>
         <xd:desc>Set this param to limit the build to a single file.</xd:desc>
     </xd:doc>
     <xsl:param name="docsToBuild" as="xs:string" select="''"/>
