@@ -2,23 +2,28 @@
    Created 2026 by Martin Holmes.         */
 
 div.utterance{
-    margin-left: 2em;
-    text-indent: -2em;
+    display: flex;
+    flex-direction: row;
+    row-gap: 1em;
+    flex-wrap: nowrap;
+    margin-top: 0.5em;
     span.speaker{
+        min-width: 4em;
         font-weight: bold;
-        padding-right: 1em;
     }
-}
-
-*[data-trans="overlap"], *[data-type="overlap"]{
+    p{
+        margin: 0;
+    }
+    &:has(*[data-trans="overlap"], *[data-type="overlap"]){
         margin-left: 6em;
+    }
 }
 
 span[date-el="foreign"]{
     font-style: italic;
 }
 span[data-el="incident"]{
-    background-color: light-gray;
+    background-color: lightgray;
     &::before{
         content: "[";
     }

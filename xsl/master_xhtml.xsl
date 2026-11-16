@@ -164,7 +164,7 @@
                 <xsl:apply-templates select="$currHtml/xh:article"/>
             </xsl:when>
             <xsl:otherwise>
-                
+                <xsl:apply-templates select="$currP5/TEI/text/body"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -175,5 +175,42 @@
     </xd:doc>
     <xsl:template match="xh:article/@id"/>
     
+    <xd:doc>
+        <xd:desc>The body becomes a div element.</xd:desc>
+    </xd:doc>
+    <xsl:template match="body">
+        <div>
+            <xsl:apply-templates select="@*|node()"/>
+        </div>
+    </xsl:template>
+    
+    <xd:doc>
+        <xd:desc>Utterances are the core component of the transcription.</xd:desc>
+    </xd:doc>
+    <xsl:template match="u">
+        <div class="utterance">
+            <xsl:apply-templates select="@*[not(local-name() eq 'who')]"/>
+            <!-- NOTE: MUCH more to do here. -->
+            <span class="speaker"><xsl:value-of select="@who"/></span>
+            <p><xsl:apply-templates select="node()"/></p>
+        </div>
+    </xsl:template>
+    
+    <xd:doc>
+        <xd:desc>These are inline elements that all become spans.</xd:desc>
+    </xd:doc>
+    <xsl:template match="seg | incident | desc | foreign">
+        <span data-el="{local-name()}">
+            <xsl:apply-templates select="@*|node()"/>
+        </span>
+    </xsl:template>
+    
+    <xd:doc>
+        <xd:desc>These are attributes which are converted into their equivalent data-*,
+            and will be trigger specific rendering.</xd:desc>
+    </xd:doc>
+    <xsl:template match="@trans | @type">
+        <xsl:attribute name="data-{local-name()}" select="."/>
+    </xsl:template>
     
 </xsl:stylesheet>

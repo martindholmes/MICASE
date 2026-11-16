@@ -344,7 +344,7 @@
                     </u>
                 </xsl:when>
                 <xsl:when test="self::OVERLAP">
-                    <u who="{$currU/@WHO}"><xsl:apply-templates select="."/></u>
+                    <u who="#{$currU/@WHO}"><xsl:apply-templates select="."/></u>
                 </xsl:when>
                 <xsl:when test="child::FOREIGN | self::EVENT | self::GAP">
                     <xsl:apply-templates select="."/>
